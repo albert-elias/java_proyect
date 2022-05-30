@@ -67,7 +67,15 @@ public class ModoPago_V extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Modo de pago"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtmodopago.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtmodopagoMouseClicked(evt);
@@ -89,7 +97,7 @@ public class ModoPago_V extends javax.swing.JFrame {
         gridBagConstraints.gridy = 0;
         jPanel1.add(jbnew, gridBagConstraints);
 
-        jbupdate.setText("Modoficar");
+        jbupdate.setText("Modificar");
         jbupdate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbupdateActionPerformed(evt);
@@ -128,7 +136,7 @@ public class ModoPago_V extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 8, Short.MAX_VALUE)))
+                        .addGap(0, 12, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -160,6 +168,20 @@ public class ModoPago_V extends javax.swing.JFrame {
         this.Count();
         id = getInt(this.jTextField1.getText());
         name = JOptionPane.showInputDialog("Nuevo cargo: ");
+
+        if (name == null) {
+            
+            int response = getInt(name);
+            
+            if (response == JOptionPane.CANCEL_OPTION) {
+                
+                JOptionPane.showMessageDialog(rootPane, "Cancelado");
+                
+            }
+            
+            return;
+            
+        }
         
         if (name.equals("")) {
             
@@ -205,17 +227,39 @@ public class ModoPago_V extends javax.swing.JFrame {
         id = getInt(this.jTextField1.getText());
         name = JOptionPane.showInputDialog("Nuevo nombre: ");
         ModoPago_C upd = new ModoPago_C(id, name);
+
+        if (name == null) {
+            
+            int response = getInt(name);
+            
+            if (response == JOptionPane.CANCEL_OPTION) {
+                
+                JOptionPane.showMessageDialog(rootPane, "Cancelado");
+                
+            }
+            
+            return;
+            
+        }
         
-        if(upd.Update()){
+        if (name.isEmpty()) {
+
+            JOptionPane.showMessageDialog(rootPane, "Campo vacio");
             
-            JOptionPane.showMessageDialog(rootPane, "Registro modficado");
-            this.update();
-            this.star();
+        } else {
+
+            if(upd.Update()){
             
-        }else{
-            
-            JOptionPane.showMessageDialog(rootPane, "No modificado");
-            
+                JOptionPane.showMessageDialog(rootPane, "Registro modficado");
+                this.update();
+                this.star();
+
+            }else{
+
+                JOptionPane.showMessageDialog(rootPane, "No modificado");
+
+            }
+
         }
         
     }//GEN-LAST:event_jbupdateActionPerformed

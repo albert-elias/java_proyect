@@ -51,6 +51,8 @@ public class Usuarios_V extends javax.swing.JFrame {
         jbsave = new javax.swing.JButton();
         jndelete = new javax.swing.JButton();
         jbupdate = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        breport = new javax.swing.JButton();
         jbexit = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -69,7 +71,15 @@ public class Usuarios_V extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Usuario", "Clave", "Tipo de Usuario"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtuser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtuserMouseClicked(evt);
@@ -113,6 +123,9 @@ public class Usuarios_V extends javax.swing.JFrame {
         jtfcode.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtfcodeKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfcodeKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -202,12 +215,34 @@ public class Usuarios_V extends javax.swing.JFrame {
         gridBagConstraints.gridheight = 3;
         jPanel2.add(jbupdate, gridBagConstraints);
 
+        java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
+        jPanel1Layout.columnWidths = new int[] {0};
+        jPanel1Layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0, 10, 0};
+        jPanel1.setLayout(jPanel1Layout);
+
+        breport.setText("Ver Reporte");
+        breport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breportActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.PAGE_START;
+        jPanel1.add(breport, gridBagConstraints);
+
         jbexit.setText("Salir");
         jbexit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbexitActionPerformed(evt);
             }
         });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 12;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LAST_LINE_END;
+        jPanel1.add(jbexit, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -216,29 +251,29 @@ public class Usuarios_V extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(160, 160, 160)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jbexit))
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 353, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(160, 160, 160)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(6, 6, 6)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jbexit))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -289,7 +324,6 @@ public class Usuarios_V extends javax.swing.JFrame {
                 
                 this.jtfcode.setText(String.valueOf(finded.getId()));
                 this.jcbtu.setSelectedIndex(finded.getTipo_usuario()-1);
-                System.out.println(jcbtu);
                 this.jtfpass.setText(finded.getClave());
                 this.jtfuser.setText(finded.getUsuario());
                 
@@ -354,7 +388,12 @@ public class Usuarios_V extends javax.swing.JFrame {
     }//GEN-LAST:event_jbsaveActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
+        this.updateTipoUsuario();
+        this.updateUser();
         this.starUser();
+        this.countUser();
+
     }//GEN-LAST:event_formWindowOpened
 
     private void jndeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jndeleteActionPerformed
@@ -373,8 +412,8 @@ public class Usuarios_V extends javax.swing.JFrame {
         }
         
         this.updateUser();
-        this.starUser();
         this.updateTipoUsuario();
+        this.starUser();
         
     }//GEN-LAST:event_jndeleteActionPerformed
 
@@ -442,7 +481,7 @@ public class Usuarios_V extends javax.swing.JFrame {
                 this.jcbtu.requestFocus();
                 
             } else {
-                System.out.println(jcbtu);
+                
                 if (!(this.jbupdate.isEnabled())){
                     
                     this.jbupdate.requestFocus();
@@ -459,6 +498,25 @@ public class Usuarios_V extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jcbtuKeyPressed
+
+    private void breportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breportActionPerformed
+        
+        vu.showUsuarios();
+
+    }//GEN-LAST:event_breportActionPerformed
+
+    private void jtfcodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcodeKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_jtfcodeKeyTyped
 
     /**
      * @param args the command line arguments
@@ -496,11 +554,13 @@ public class Usuarios_V extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton breport;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JButton jbexit;
@@ -518,6 +578,7 @@ public class Usuarios_V extends javax.swing.JFrame {
     public int cod, t_u;
     public String name, password;
     private final Usuarios_C c = new Usuarios_C();
+    private final vista_usuarios vu = new vista_usuarios();
     
     private void updateUser() {
         
@@ -533,8 +594,7 @@ public class Usuarios_V extends javax.swing.JFrame {
     private void starUser() {
         
         dtmuser = (DefaultTableModel) this.jtuser.getModel();
-        vista_usuarios u = new vista_usuarios();
-        ArrayList<vista_usuarios> all = u.buscarusuario();
+        ArrayList<vista_usuarios> all = vu.buscarusuario();
         
         for (int i = 0; i <all.size(); i++) {
             
@@ -545,8 +605,11 @@ public class Usuarios_V extends javax.swing.JFrame {
         
         TipoUsuario_C tu = new TipoUsuario_C();
         ArrayList<TipoUsuario_C> list = tu.SearchAll();
+
         for(int i = 0; i < list.size(); i++){
+
             jcbtu.addItem(String.valueOf(list.get(i).getId()) + " - " + list.get(i).getName());
+
         }
         
         jcbtu.setSelectedIndex(-1);
@@ -576,7 +639,9 @@ public class Usuarios_V extends javax.swing.JFrame {
     }
     
     public static Integer getInt(String cadena){
+
         return ( (cadena == null || cadena.isEmpty() ) ? 0 : Integer.parseInt(cadena.trim()));
+
     }
 
 }

@@ -11,10 +11,18 @@ import Modelos.CargosM;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -74,7 +82,7 @@ public class CargosC extends CargosM {
                 
             } 
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(CargosC.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -96,15 +104,11 @@ public class CargosC extends CargosM {
                 
                 return true;
                 
-            } else {
-            
-                return false;
-                
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
-            Logger.getLogger(CargosC.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(CargosC.class.getName()).log(Level.SEVERE, null, ex.getMessage());
             
         }
     
@@ -157,7 +161,7 @@ public class CargosC extends CargosM {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             
@@ -183,7 +187,7 @@ public class CargosC extends CargosM {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(CargosC.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -210,7 +214,7 @@ public class CargosC extends CargosM {
             }
             
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(CargosC.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -238,7 +242,7 @@ public class CargosC extends CargosM {
                 
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
             System.err.println(e+"Hubo un error en el SQL");
             
@@ -247,5 +251,52 @@ public class CargosC extends CargosM {
         return n;
     
     }
+
+    public void showCargos(){
+  
+        try {
+
+            String ubicacion = "C:\\Users\\User\\JaspersoftWorkspace\\estoy\\cargos.jasper";
+            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(ubicacion);
+            JasperPrint jp = JasperFillManager.fillReport(report, null, rutaConec); 
+            JasperViewer view = new JasperViewer(jp, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+            view.setVisible(true);
+
+        } catch (JRException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
+    }
+
+//    public class SizeProperties {
+//
+//        private static SizeProperties _instance;
+//        private Sizes _selectedSize;
+//
+//        public enum Sizes{SMALL, MEDIUM, LARGE}
+//
+//        private SizeProperties(){
+//            _selectedSize = Sizes.SMALL;
+//        }
+//
+//        public static SizeProperties getInstance(){
+//            if(_instance == null){
+//                _instance = new SizeProperties();
+//            }
+//            return _instance;
+//        }
+//
+//        public Sizes getSelectedSize(){
+//            return _selectedSize;
+//        }
+//
+//        public void setSelectedSize(Sizes size){
+//            _selectedSize = size;
+//        }
+//    }
+
     
 }

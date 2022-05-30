@@ -82,7 +82,15 @@ public class vista_vendedores extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Vendedor"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtcity.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtcityMouseClicked(evt);
@@ -154,6 +162,7 @@ public class vista_vendedores extends javax.swing.JFrame {
         name = jtfsearch.getText();
         DetalleVentas_V.tfvendedor.setText(nombre);
         DetalleVentas_V.tfvendedorname.setText(name);
+        DetalleVentas_V.tfinicio.setText("2");
         dispose();
 
     }//GEN-LAST:event_jbselectActionPerformed
@@ -173,6 +182,7 @@ public class vista_vendedores extends javax.swing.JFrame {
             nombre = jTextField1.getText();
             DetalleVentas_V.tfvendedor.setText(nombre);
             DetalleVentas_V.tfvendedorname.setText(name);
+            DetalleVentas_V.tfinicio.setText("2");
             this.dispose();
 
         } else {

@@ -43,6 +43,7 @@ public class Ciudades_V extends javax.swing.JFrame {
         bguardar = new javax.swing.JButton();
         bdelete = new javax.swing.JButton();
         bexit = new javax.swing.JButton();
+        breport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -60,7 +61,15 @@ public class Ciudades_V extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Ciudad"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tciudad.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tciudadMouseClicked(evt);
@@ -71,8 +80,8 @@ public class Ciudades_V extends javax.swing.JFrame {
         jLabel2.setText("Nuevo:");
 
         java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
-        jPanel1Layout.columnWidths = new int[] {0, 12, 0, 12, 0};
-        jPanel1Layout.rowHeights = new int[] {0};
+        jPanel1Layout.columnWidths = new int[] {0, 12, 0};
+        jPanel1Layout.rowHeights = new int[] {0, 10, 0};
         jPanel1.setLayout(jPanel1Layout);
 
         bguardar.setText("Guardar");
@@ -84,6 +93,7 @@ public class Ciudades_V extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 20;
         jPanel1.add(bguardar, gridBagConstraints);
 
         bdelete.setText("Eliminar");
@@ -104,9 +114,21 @@ public class Ciudades_V extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.ipadx = 16;
         jPanel1.add(bexit, gridBagConstraints);
+
+        breport.setText("Ver Reporte");
+        breport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breportActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        jPanel1.add(breport, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -137,7 +159,7 @@ public class Ciudades_V extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 3, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 232, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -146,7 +168,7 @@ public class Ciudades_V extends javax.swing.JFrame {
                     .addComponent(tfciudad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(0, 0, 0))
         );
 
         pack();
@@ -163,12 +185,18 @@ public class Ciudades_V extends javax.swing.JFrame {
         number = getInt(this.jTextField1.getText());
         name = tfciudad.getText();
         
-        if (name.equals("")) {
+        if (name.isEmpty()) {
             
-            JOptionPane.showMessageDialog(rootPane, "Campo Vacio. \n Registro anulado.");
+            JOptionPane.showMessageDialog(rootPane, "Campo Vacio.");
+            tfciudad.requestFocus();
+            return;
             
-        } else {
-        
+        }
+
+        Ciudades_C res = c.consultCiudad(name);
+
+        if (res == null) {
+          
             Ciudades_C a = new Ciudades_C(number, name);
             Ciudades_C already = a.Search(String.valueOf(number));
             
@@ -198,7 +226,11 @@ public class Ciudades_V extends javax.swing.JFrame {
                 this.tfciudad.setText("");
                 
             }
-        
+  
+        } else {
+
+            JOptionPane.showMessageDialog(rootPane, "Ya existe");
+
         }
         
     }//GEN-LAST:event_bguardarActionPerformed
@@ -250,6 +282,12 @@ public class Ciudades_V extends javax.swing.JFrame {
         
     }//GEN-LAST:event_tciudadMouseClicked
 
+    private void breportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breportActionPerformed
+        
+        c.showCiudades();
+
+    }//GEN-LAST:event_breportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -289,6 +327,7 @@ public class Ciudades_V extends javax.swing.JFrame {
     private javax.swing.JButton bdelete;
     private javax.swing.JButton bexit;
     private javax.swing.JButton bguardar;
+    private javax.swing.JButton breport;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -299,6 +338,7 @@ public class Ciudades_V extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     DefaultTableModel dtmciudades;
+    private final Ciudades_C c = new Ciudades_C();
     private int number;
     private String name;
 
@@ -306,8 +346,7 @@ public class Ciudades_V extends javax.swing.JFrame {
     
         try {
             
-            Ciudades_C a = new Ciudades_C();
-            jTextField1.setText(a.New());
+            jTextField1.setText(c.New());
             
         } catch (Exception e) {
             
@@ -332,7 +371,6 @@ public class Ciudades_V extends javax.swing.JFrame {
     private void star () {
         
         dtmciudades = (DefaultTableModel) tciudad.getModel();
-        Ciudades_C c = new Ciudades_C();
         ArrayList<Ciudades_C> all = c.SearchAll();
         
         for(int i=0; i < all.size(); i++ ){

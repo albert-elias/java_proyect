@@ -8,9 +8,7 @@ package Ventanas;
 import Control.CargosC;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
-import org.jcp.xml.dsig.internal.dom.Utils;
 
 /**
  *
@@ -33,6 +31,7 @@ public class Cargos_V extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
         jbmod = new javax.swing.JButton();
@@ -43,6 +42,7 @@ public class Cargos_V extends javax.swing.JFrame {
         jtcargos = new javax.swing.JTable();
         jbsalir = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        breport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -63,7 +63,10 @@ public class Cargos_V extends javax.swing.JFrame {
                 jbmodActionPerformed(evt);
             }
         });
-        jPanel1.add(jbmod, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(jbmod, gridBagConstraints);
 
         jbelim.setText("Eliminar");
         jbelim.addActionListener(new java.awt.event.ActionListener() {
@@ -71,7 +74,10 @@ public class Cargos_V extends javax.swing.JFrame {
                 jbelimActionPerformed(evt);
             }
         });
-        jPanel1.add(jbelim, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(jbelim, gridBagConstraints);
 
         jbnuevo.setText("Nuevo");
         jbnuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -79,7 +85,10 @@ public class Cargos_V extends javax.swing.JFrame {
                 jbnuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(jbnuevo, new java.awt.GridBagConstraints());
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        jPanel1.add(jbnuevo, gridBagConstraints);
 
         jLabel1.setText("CARGOS LABORALES");
 
@@ -90,22 +99,33 @@ public class Cargos_V extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Nombre"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtcargos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtcargosMouseClicked(evt);
             }
         });
         jScrollPane1.setViewportView(jtcargos);
-        if (jtcargos.getColumnModel().getColumnCount() > 0) {
-            jtcargos.getColumnModel().getColumn(0).setHeaderValue("Codigo");
-            jtcargos.getColumnModel().getColumn(1).setHeaderValue("Nombre");
-        }
 
         jbsalir.setText("x");
         jbsalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbsalirActionPerformed(evt);
+            }
+        });
+
+        breport.setText("Ver Reporte");
+        breport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breportActionPerformed(evt);
             }
         });
 
@@ -126,7 +146,8 @@ public class Cargos_V extends javax.swing.JFrame {
                                     .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jbsalir))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(breport))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -142,7 +163,9 @@ public class Cargos_V extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(5, 5, 5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(breport)
+                .addContainerGap())
         );
 
         pack();
@@ -151,13 +174,12 @@ public class Cargos_V extends javax.swing.JFrame {
     private void jbelimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbelimActionPerformed
         
         String code = jTextField1.getText();
-        CargosC car = new CargosC();
         
-        if(car.Delete(code)){
+        if (c.Delete(code)) {
             
             JOptionPane.showMessageDialog(this, "Eliminando satisfactoriamente");
             
-        }else{
+        } else {
             
             JOptionPane.showMessageDialog(this, "Imposible eliminar");
             
@@ -180,9 +202,23 @@ public class Cargos_V extends javax.swing.JFrame {
         number = getInt(this.jTextField1.getText());
         name = JOptionPane.showInputDialog("Nuevo cargo: ");
         
-        if (name.equals("")) {
+        if (name == null) {
             
-            JOptionPane.showMessageDialog(rootPane, "Campo Vacio. \n Registro anulado.");
+            int response = getInt(name);
+            
+            if (response == JOptionPane.CANCEL_OPTION) {
+                
+                JOptionPane.showMessageDialog(rootPane, "Cancelado");
+                
+            }
+            
+            return;
+            
+        }
+
+        if (name.isEmpty()) {
+
+            JOptionPane.showMessageDialog(rootPane, "Campo vacio");
             
         } else {
         
@@ -234,12 +270,11 @@ public class Cargos_V extends javax.swing.JFrame {
         this.jbmod.setEnabled(true);
         t_cargos = (DefaultTableModel) this.jtcargos.getModel();
         int selRow = this.jtcargos.getSelectedRow();
-        CargosC car = new CargosC();
         
         if(selRow != -1){
             
             String id = t_cargos.getValueAt(selRow, 0).toString();
-            CargosC finded = car.Search(id);
+            CargosC finded = c.Search(id);
             
             if(!(finded == null)){
                 
@@ -257,19 +292,49 @@ public class Cargos_V extends javax.swing.JFrame {
         name = JOptionPane.showInputDialog("Nuevo nombre: ");
         CargosC upd = new CargosC(number, name);
         
-        if(upd.Update()){
+        if (name == null) {
             
-            JOptionPane.showMessageDialog(rootPane, "Registro modficado");
-            this.update();
-            this.star();
+            int response = getInt(name);
             
-        }else{
+            if (response == JOptionPane.CANCEL_OPTION) {
+                
+                JOptionPane.showMessageDialog(rootPane, "Cancelado");
+                
+            }
             
-            JOptionPane.showMessageDialog(rootPane, "No modificado");
+            return;
             
         }
 
+        if (name.isEmpty()) {
+
+            JOptionPane.showMessageDialog(rootPane, "Campo vacio");
+            
+        } else {
+
+            if (upd.Update()) {
+
+                JOptionPane.showMessageDialog(rootPane, "Registro modficado");
+                this.update();
+                this.star();
+
+            } else {
+
+                JOptionPane.showMessageDialog(rootPane, "No modificado");
+
+            }
+
+        }
+
+        
+
     }//GEN-LAST:event_jbmodActionPerformed
+
+    private void breportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breportActionPerformed
+        
+        c.showCargos();
+
+    }//GEN-LAST:event_breportActionPerformed
 
     /**
      * @param args the command line arguments
@@ -307,6 +372,7 @@ public class Cargos_V extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton breport;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -321,13 +387,13 @@ public class Cargos_V extends javax.swing.JFrame {
     DefaultTableModel t_cargos;
     private int number;
     private String name;
+    private final CargosC c = new CargosC();
 
     private void Count () {
     
         try {
             
-            CargosC a = new CargosC();
-            jTextField1.setText(a.New());
+            jTextField1.setText(c.New());
             
         } catch (Exception e) {
             
@@ -352,7 +418,6 @@ public class Cargos_V extends javax.swing.JFrame {
     private void star () {
         
         t_cargos = (DefaultTableModel) jtcargos.getModel();
-        CargosC c = new CargosC();
         ArrayList<CargosC> all = c.SearchAll();
         
         for(int i=0; i < all.size(); i++ ){

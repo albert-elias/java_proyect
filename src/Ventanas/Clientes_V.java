@@ -61,6 +61,7 @@ public class Clientes_V extends javax.swing.JFrame {
         jbdelete = new javax.swing.JButton();
         jbcancel = new javax.swing.JButton();
         jbmodif = new javax.swing.JButton();
+        breport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Clientes");
@@ -80,7 +81,15 @@ public class Clientes_V extends javax.swing.JFrame {
             new String [] {
                 "ID", "RUC/CI", "Cliente", "Telefono", "Direccion", "Ciudad"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtclientes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtclientesMouseClicked(evt);
@@ -96,14 +105,14 @@ public class Clientes_V extends javax.swing.JFrame {
         jPanel1Layout.rowHeights = new int[] {0, 10, 0, 10, 0, 10, 0, 10, 0};
         jPanel1.setLayout(jPanel1Layout);
 
-        jLabel1.setText("Cliente");
+        jLabel1.setText("Cliente *");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel1.add(jLabel1, gridBagConstraints);
 
-        jLabel2.setText("RUC/CI");
+        jLabel2.setText("RUC/CI *");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -117,7 +126,7 @@ public class Clientes_V extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         jPanel1.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setText("Telefono");
+        jLabel4.setText("Telefono *");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
@@ -181,6 +190,9 @@ public class Clientes_V extends javax.swing.JFrame {
         jtfcodciu.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtfcodciuKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfcodciuKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -283,6 +295,13 @@ public class Clientes_V extends javax.swing.JFrame {
         gridBagConstraints.gridy = 6;
         jPanel1.add(jbmodif, gridBagConstraints);
 
+        breport.setText("Ver Reporte");
+        breport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -299,7 +318,9 @@ public class Clientes_V extends javax.swing.JFrame {
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 404, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(breport)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -308,7 +329,11 @@ public class Clientes_V extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(breport)))
                 .addContainerGap())
         );
 
@@ -326,14 +351,17 @@ public class Clientes_V extends javax.swing.JFrame {
         
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             
-            code = Integer.parseInt(jtfcodciu.getText());
-            Ciudades_C res = cc.Search(String.valueOf(code));
+            String value = jtfcodciu.getText();
+
+            if (value.isEmpty()) {
+                
+                code = 1;
+                
+            }
             
-            if (jtfcodciu.getText().equals("".trim())) {
-                
-                JOptionPane.showMessageDialog(rootPane, "Error");
-                
-            } else if (res == null) {
+            Ciudades_C res = cc.Search(String.valueOf(code));
+
+            if (res == null) {
                 
                 JOptionPane.showMessageDialog(rootPane, "Codigo no existe");
                 this.jtfcodciu.requestFocus();
@@ -445,14 +473,17 @@ public class Clientes_V extends javax.swing.JFrame {
         direction = jtfdirection.getText();
         city = getInt(jtfcodciu.getText());
         
-        if ((code <= 0) || (ruc.equals("")) || (client.equals("") || (telephone.equals("")))) {
+        if ((code <= 0) || (ruc.isEmpty()) || (client.isEmpty()) || (telephone.isEmpty())) {
             
-            JOptionPane.showMessageDialog(rootPane, "No registrada \nComplete todos los campos");
+            JOptionPane.showMessageDialog(rootPane, "No registrada. \nComplete los campos obligatorios.");
             
         } else {
             
+            if (direction.isEmpty()) {direction = "Sin especificar"; }
+            if (city == 0) { city = 1; }
+
             Clientes_C cod = new Clientes_C(code, ruc, client, telephone, direction, city);
-            Clientes_C ok = cod.Search(String.valueOf(code));
+            Clientes_C ok = cod.ConsultRuc(ruc);
             
             if (ok == null) {
                 
@@ -551,18 +582,31 @@ public class Clientes_V extends javax.swing.JFrame {
         telephone = jtftelephone.getText();
         direction = jtfdirection.getText();
         city = getInt(jtfcodciu.getText());
-        
-        Clientes_C mci = new Clientes_C(code, client, ruc, telephone, direction, city);
-        if(mci.Update()){
-            
-            JOptionPane.showMessageDialog(rootPane, "Registro modficado");
-            this.update();
-            this.star();
-            
+
+        if ((code <= 0) || (ruc.isEmpty()) || (client.isEmpty()) || (telephone.isEmpty())) {
+
+            JOptionPane.showMessageDialog(rootPane, "No se pudo modificar. \nLos campos obligatorios no pueden quedar nulos");
+
         } else {
-            
-            JOptionPane.showMessageDialog(rootPane, "No modificado");
-            
+
+            if (direction.isEmpty()) { direction = "Sin asignar"; }
+            if (city == 0) { city = 1; }
+        
+            Clientes_C mci = new Clientes_C(code, client, ruc, telephone, direction, city);
+
+            if (mci.Update()) {
+
+                JOptionPane.showMessageDialog(rootPane, "Registro modficado");
+                this.update();
+                this.star();
+                clean();
+
+            } else {
+
+                JOptionPane.showMessageDialog(rootPane, "No modificado");
+
+            }
+
         }
         
     }//GEN-LAST:event_jbupdateActionPerformed
@@ -584,6 +628,7 @@ public class Clientes_V extends javax.swing.JFrame {
         
         this.update();
         this.star();
+        clean();
         
     }//GEN-LAST:event_jbdeleteActionPerformed
 
@@ -599,6 +644,7 @@ public class Clientes_V extends javax.swing.JFrame {
         try {
             
             this.jbupdate.setEnabled(true);
+            this.jbsave.setEnabled(false);
             this.jbsearch.setEnabled(true);
             this.jtfclient.setEditable(true);
             this.jtfruc.setEditable(true);
@@ -614,6 +660,25 @@ public class Clientes_V extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jbmodifActionPerformed
+
+    private void breportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breportActionPerformed
+        
+        vc.showClientes();
+
+    }//GEN-LAST:event_breportActionPerformed
+
+    private void jtfcodciuKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfcodciuKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_jtfcodciuKeyTyped
 
     /**
      * @param args the command line arguments
@@ -651,6 +716,7 @@ public class Clientes_V extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton breport;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -691,13 +757,13 @@ public class Clientes_V extends javax.swing.JFrame {
             
         } catch (Exception e) {
             
-            
+            System.err.println(e.getMessage());
             
         }
     
     }
     
-    private void clean (){
+    private void clean () {
 
         this.jTextField1.setText("");
         this.jtfruc.setText("");

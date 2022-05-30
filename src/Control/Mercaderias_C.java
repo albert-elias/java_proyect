@@ -11,12 +11,21 @@ import Modelos.Mercaderias_M;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
 
 /**
  *
@@ -148,7 +157,7 @@ public class Mercaderias_C extends Mercaderias_M {
         
         try {
             
-            querySQL = "select * from mercaderias where id ='"+cod+"'";
+            querySQL = "select * from mercaderias where id = '"+cod+"'";
             state = rutaConec.createStatement();
             rs = state.executeQuery(querySQL);
             
@@ -159,7 +168,7 @@ public class Mercaderias_C extends Mercaderias_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             
@@ -243,12 +252,14 @@ public class Mercaderias_C extends Mercaderias_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Mercaderias_C.class.getName()).log(Level.SEVERE, null, ex);
             
         }
+
         return all;
+
     }
     
     public String New () {
@@ -321,7 +332,7 @@ public class Mercaderias_C extends Mercaderias_M {
                 
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
             System.err.println("Error" + e.getMessage());
             
@@ -330,241 +341,132 @@ public class Mercaderias_C extends Mercaderias_M {
         return String.valueOf(price);
     
     }
-    
-    public DefaultTableModel Search4ID (String search) {
+
+    public ArrayList <Mercaderias_C> SearchID (String search){
         
-        String [] items = {"id", "codigo", "nombre", "stock", "precio", "descipcion"};
-        String [] files = new String [6];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from mercaderias where id like '%"+search+"%'";
+        ArrayList<Mercaderias_C> all = new ArrayList<>();
         
         try {
             
-            ps = rutaConec.prepareStatement(querySQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("codigo");
-                files [2] = rs.getString("nombre");
-                files [3] = rs.getString("stock");
-                files [4] = rs.getString("precio");
-                files [5] = rs.getString("descripcion");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception e) {
-            
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
-            
-        }
-        
-        return model;
-    
-    }
-    
-    public DefaultTableModel Search4Name (String search) {
-        
-        String [] items = {"id", "codigo", "nombre", "stock", "precio", "descipcion"};
-        String [] files = new String [6];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from mercaderias where nombre like '%"+search+"%'";
-        
-        try {
-            
-            ps = rutaConec.prepareStatement(querySQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("codigo");
-                files [2] = rs.getString("nombre");
-                files [3] = rs.getString("stock");
-                files [4] = rs.getString("precio");
-                files [5] = rs.getString("descripcion");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception e) {
-            
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
-            
-        }
-        
-        return model;
-    
-    }
-    
-    public DefaultTableModel Search4Code (String search) {
-        
-        String [] items = {"id", "codigo", "nombre", "stock", "precio", "descipcion"};
-        String [] files = new String [6];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from mercaderias where codigo like '%"+search+"%'";
-        
-        try {
-            
-            ps = rutaConec.prepareStatement(querySQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("codigo");
-                files [2] = rs.getString("nombre");
-                files [3] = rs.getString("stock");
-                files [4] = rs.getString("precio");
-                files [5] = rs.getString("descripcion");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception e) {
-            
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
-            
-        }
-        
-        return model;
-    
-    }
-    
-    public DefaultTableModel Search4Desc (String search) {
-        
-        String [] items = {"id", "codigo", "nombre", "stock", "precio", "descipcion"};
-        String [] files = new String [6];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from mercaderias where descripcion like '%"+search+"%'";
-        
-        try {
-            
-            ps = rutaConec.prepareStatement(querySQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("codigo");
-                files [2] = rs.getString("nombre");
-                files [3] = rs.getString("stock");
-                files [4] = rs.getString("precio");
-                files [5] = rs.getString("descripcion");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception e) {
-            
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
-            
-        }
-        
-        return model;
-    
-    }
-    
-    public DefaultTableModel Search4View (String name) {
-        
-        String [] items = {"Codigo", "Nombre", "Descripcion"};
-        String [] files = new String [3];
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        
-        try {
-            
-            querySQL = "select * from mercaderias where codigo like '"+name+"%'";
+            querySQL = "select * from mercaderias where id like '%"+search+"%'";
             state = rutaConec.createStatement();
             rs = state.executeQuery(querySQL);
             
             while (rs.next()) {
                 
-                files [0] = rs.getString("codigo");
-                files [1] = rs.getString("nombre");
-                files [2] = rs.getString("descripcion");
-                
-                model.addRow(files);
+                all.add(new Mercaderias_C(rs.getInt("id"), rs.getString("codigo"), rs.getString("nombre"),
+                rs.getInt("stock"), rs.getInt("precio"), rs.getString("descripcion")));
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
-            System.err.println(ex);
+            Logger.getLogger(Mercaderias_C.class.getName()).log(Level.SEVERE, null, ex);
             
         }
+
+        return all;
+
+    }
+
+    public ArrayList <Mercaderias_C> SearchName (String search){
         
-        return model;
+        ArrayList<Mercaderias_C> all = new ArrayList<>();
         
+        try {
+            
+            querySQL = "select * from mercaderias where nombre like '%"+search+"%'";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {
+                
+                all.add(new Mercaderias_C(rs.getInt("id"), rs.getString("codigo"), rs.getString("nombre"),
+                rs.getInt("stock"), rs.getInt("precio"), rs.getString("descripcion")));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            Logger.getLogger(Mercaderias_C.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+
+        return all;
+
+    }
+
+    public ArrayList <Mercaderias_C> SearchCodigo (String search){
+        
+        ArrayList<Mercaderias_C> all = new ArrayList<>();
+        
+        try {
+            
+            querySQL = "select * from mercaderias where codigo like '%"+search+"%'";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {
+                
+                all.add(new Mercaderias_C(rs.getInt("id"), rs.getString("codigo"), rs.getString("nombre"),
+                rs.getInt("stock"), rs.getInt("precio"), rs.getString("descripcion")));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            Logger.getLogger(Mercaderias_C.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+
+        return all;
+
+    }
+
+    public ArrayList <Mercaderias_C> SearchDescription (String search){
+        
+        ArrayList<Mercaderias_C> all = new ArrayList<>();
+        
+        try {
+            
+            querySQL = "select * from mercaderias where descripcion like '%"+search+"%'";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {
+                
+                all.add(new Mercaderias_C(rs.getInt("id"), rs.getString("codigo"), rs.getString("nombre"),
+                rs.getInt("stock"), rs.getInt("precio"), rs.getString("descripcion")));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            Logger.getLogger(Mercaderias_C.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+
+        return all;
+
+    }
+
+    public void showMercaderias(){
+  
+        try {
+
+            String ubicacion = "C:\\Users\\User\\JaspersoftWorkspace\\estoy\\mercaderas.jasper";
+            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(ubicacion);
+            JasperPrint jp = JasperFillManager.fillReport(report, null, rutaConec); 
+            JasperViewer view = new JasperViewer(jp, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+            view.setVisible(true);
+
+        } catch (JRException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
     }
     
 }

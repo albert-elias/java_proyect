@@ -11,6 +11,7 @@ import Modelos.DetalleVentas_M;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -74,7 +75,7 @@ public class DetalleVentas_C extends DetalleVentas_M {
                 
             } 
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(DetalleVentas_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -103,7 +104,7 @@ public class DetalleVentas_C extends DetalleVentas_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(DetalleVentas_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -132,7 +133,7 @@ public class DetalleVentas_C extends DetalleVentas_M {
             
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
             Logger.getLogger(DetalleVentas_C.class.getName()).log(Level.SEVERE, null, e.getMessage());
             
@@ -163,7 +164,7 @@ public class DetalleVentas_C extends DetalleVentas_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(DetalleVentas_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -180,7 +181,33 @@ public class DetalleVentas_C extends DetalleVentas_M {
         try {
             
             querySQL = "select * from detalle_ventas where mercaderias_id ='"+cod+"'";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
             
+            while (rs.next()) {
+                
+                val = new DetalleVentas_C(rs.getInt("ventas_id"), rs.getInt("mercaderias_id"),
+                rs.getInt("cantidad"), rs.getInt("precio"), rs.getInt("precio_final"));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            System.err.println(ex);
+            
+        }
+        
+        return val;
+        
+    }
+    
+    public DetalleVentas_C searchVenta (String cod) {
+        
+        DetalleVentas_C val = null;
+        
+        try {
+            
+            querySQL = "select * from detalle_ventas where ventas_id ='"+cod+"'";
             state = rutaConec.createStatement();
             rs = state.executeQuery(querySQL);
             
@@ -255,4 +282,57 @@ public class DetalleVentas_C extends DetalleVentas_M {
     
     }
     
+    public DetalleVentas_C codigos (int code, int mer) {
+        
+        DetalleVentas_C value = null;
+        
+        try {
+            
+            querySQL = "select * from detalle_ventas where ventas_id = "+code+" and mercaderias_id = "+mer+"";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {                
+                
+                value = new DetalleVentas_C(rs.getInt("ventas_id"), rs.getInt("mercaderias_id"),
+                rs.getInt("cantidad"), rs.getInt("precio"), rs.getInt("precio_final"));
+                
+            }
+            
+        } catch (Exception e) {
+            
+            System.err.println(e.getMessage());
+            
+        }
+        
+        return value;
+        
+    }
+    
+    public String CountProducts (int venta) {
+    
+        String value = null;
+        
+        try {
+            
+            querySQL = "select count(mercaderias_id) from detalle_ventas where ventas_id = " + venta;
+            ps = rutaConec.prepareStatement(querySQL);
+            rs = ps.executeQuery();
+            
+            while (rs.next()) {
+                
+                value = rs.getString("count(mercaderias_id)");
+                
+            }
+            
+        } catch (Exception e) {
+            
+            System.out.println(e.getMessage());
+            
+        }
+        
+        return value;
+    
+    }
+
 }

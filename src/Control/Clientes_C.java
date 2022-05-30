@@ -11,6 +11,7 @@ import Modelos.Clientes_M;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -158,7 +159,7 @@ public class Clientes_C extends Clientes_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             
@@ -186,7 +187,7 @@ public class Clientes_C extends Clientes_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Clientes_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -212,7 +213,7 @@ public class Clientes_C extends Clientes_M {
             }
             
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Clientes_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -240,7 +241,7 @@ public class Clientes_C extends Clientes_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             

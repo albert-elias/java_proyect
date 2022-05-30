@@ -84,7 +84,15 @@ public class vista_mercaderias extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Nombre", "Descripcion"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtcity.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtcityMouseClicked(evt);
@@ -165,6 +173,7 @@ public class vista_mercaderias extends javax.swing.JFrame {
         nombre = jtfsearch.getText();
         DetalleVentas_V.tfmercaderia.setText(nombre);
         DetalleVentas_V.tfmercaderia.requestFocus();
+        DetalleVentas_V.tfinicio.setText("2");
         dispose();
 
     }//GEN-LAST:event_jbselectActionPerformed
@@ -182,6 +191,7 @@ public class vista_mercaderias extends javax.swing.JFrame {
             nombre = jtfsearch.getText();
             DetalleVentas_V.tfmercaderia.setText(nombre);
             DetalleVentas_V.tfmercaderia.requestFocus();
+            DetalleVentas_V.tfinicio.setText("2");
             this.dispose();
 
         } else {
@@ -281,9 +291,28 @@ public class vista_mercaderias extends javax.swing.JFrame {
     
     public void consult (String search) {
     
-        DefaultTableModel model = m.Search4View(search);
-        jtcity.setModel(model);
+        dtm = (DefaultTableModel) jtcity.getModel();
+        ArrayList<Mercaderias_C> list = m.SearchCodigo(search);
+        update();
+
+        for (Mercaderias_M res : list) {
+
+            dtm.addRow(new Object[]{res.getCodigo(), res.getNombre(), res.getDescripcion()});
+            
+        }
     
+    }
+
+    private void update (){
+
+        int tam = jtcity.getRowCount();
+        
+        for (int i = 0; i < tam; i++) {
+            
+            dtm.removeRow(0);
+            
+        }
+
     }
     
     private void star () {

@@ -14,10 +14,10 @@ import Control.Ventas_C;
 import Vistas.vista_clientes;
 import Vistas.vista_mercaderias;
 import Vistas.vista_vendedores;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -78,12 +78,18 @@ public class DetalleVentas_V extends javax.swing.JFrame {
         tfmonto = new javax.swing.JTextField();
         bguardar = new javax.swing.JButton();
         bcancelar = new javax.swing.JButton();
+        jbmodificar = new javax.swing.JButton();
+        jbactualizar = new javax.swing.JButton();
+        jbcerrar = new javax.swing.JButton();
+        jTextField1 = new javax.swing.JTextField();
+        tfinicio = new javax.swing.JTextField();
+        bsave = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Detalle Ventas");
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
             }
         });
 
@@ -94,7 +100,15 @@ public class DetalleVentas_V extends javax.swing.JFrame {
             new String [] {
                 "Producto", "Cantidad", "Precio unitario", "Monto total"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tdetalleventa);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Cargar productos"));
@@ -143,6 +157,9 @@ public class DetalleVentas_V extends javax.swing.JFrame {
         tfcantdad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfcantdadKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfcantdadKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -226,6 +243,9 @@ public class DetalleVentas_V extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfclienteKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfclienteKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -283,6 +303,9 @@ public class DetalleVentas_V extends javax.swing.JFrame {
         tfvendedor.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfvendedorKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfvendedorKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -380,35 +403,87 @@ public class DetalleVentas_V extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel3.add(bcancelar, gridBagConstraints);
 
+        jbmodificar.setText("Modificar");
+        jbmodificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbmodificarActionPerformed(evt);
+            }
+        });
+
+        jbactualizar.setText("Actualizar");
+        jbactualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbactualizarActionPerformed(evt);
+            }
+        });
+
+        jbcerrar.setText("Cerrar");
+        jbcerrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbcerrarActionPerformed(evt);
+            }
+        });
+
+        bsave.setText("Cargar");
+        bsave.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bsaveActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1))
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jbmodificar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbactualizar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jbcerrar)
+                        .addGap(162, 162, 162)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(tfinicio, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(bsave))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bsave))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 199, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(11, 11, 11)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(tfinicio, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jbmodificar)
+                            .addComponent(jbactualizar)
+                            .addComponent(jbcerrar))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -479,18 +554,7 @@ public class DetalleVentas_V extends javax.swing.JFrame {
             
                 int id = getInt(tfvendedor.getText());
                 tfvendedorname.setText(f.CulsultName(id));
-                
-                //Se realiza el insert de venta
-                venta = getInt(tfventa.getText());
-                cliente = getInt(tfcliente.getText());
-                funcionario = getInt(tfvendedor.getText());
-                factura = tffactura.getText();
-                fecha = tffecha.getText();
-                
-                Ventas_C val = new Ventas_C(venta, fecha, factura, cliente, funcionario);
-                val.Insert();
-                System.out.println("Se cargo exitosamente la la tabla de venta");
-                tfmercaderia.requestFocus();
+                this.bsaveActionPerformed(null);
                 
             }
             
@@ -526,8 +590,8 @@ public class DetalleVentas_V extends javax.swing.JFrame {
     private void bcargarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcargarActionPerformed
         
         venta = getInt(tfventa.getText());
-        mercaderia = tfmercaderia.getText();
-        int idmer = getInt(m.ConsultID(mercaderia));
+        String mer = tfmercaderia.getText();
+        int idmer = getInt(m.ConsultID(mer));
         cantidad = getInt(tfcantdad.getText());
         precio = getInt(tfprecio.getText());
         preciof = getInt(tfpreciofinal.getText());
@@ -539,10 +603,28 @@ public class DetalleVentas_V extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Complete los datos del cliente antes de ingresar una mercaderia");
             tfcliente.requestFocus();
             
+        } else if (idmer == 0) {
+            
+            JOptionPane.showMessageDialog(rootPane, "Campo vacio");
+            tfmercaderia.requestFocus();
+            
         } else {
         
-            DetalleVentas_C values = new DetalleVentas_C(venta, idmer, cantidad, precio, preciof);
-            values.Insert();
+            DetalleVentas_C detalle = new DetalleVentas_C(venta, idmer, cantidad, precio, preciof);
+            DetalleVentas_C consult = dv.codigos(venta, idmer);
+            
+            if (consult == null) {
+                
+                if (detalle.Insert()) {
+                    
+                }
+                
+            } else {
+            
+                JOptionPane.showMessageDialog(rootPane, "Error.\nYa se cargo el producto.");
+                return;
+            
+            }
         
         }
         
@@ -550,22 +632,18 @@ public class DetalleVentas_V extends javax.swing.JFrame {
         update();
         star();
         sum();
+        this.tfcliente.requestFocus();
+        this.tfventa.setEditable(false);
+        this.tfclientename.setEditable(false);
+        this.tfvendedorname.setEditable(false);
         
     }//GEN-LAST:event_bcargarActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
-        star();
-        count();
-        this.jPanel1.setEnabled(false);
-        
-    }//GEN-LAST:event_formWindowOpened
 
     private void tfcantdadKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfcantdadKeyPressed
         
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             
-            cantidad = getInt(tfcantdad.getText());
+            cantidad = getInt(tfcantdad.getText().trim());
             
             if (cantidad <= 0) {
                 
@@ -628,41 +706,59 @@ public class DetalleVentas_V extends javax.swing.JFrame {
 
     private void bguardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bguardarActionPerformed
         
-        JOptionPane.showMessageDialog(rootPane, "Guardado y en espera de confirmacion");
-        update();
-        clean_ven();
+        venta = getInt(tfventa.getText());
+        Ventas_C val = v.Search(String.valueOf(venta));
+        DetalleVentas_C value = dv.searchVenta(String.valueOf(venta));
+        System.out.println(val);
+        if ((val == null) || (value == null)) {
+
+            JOptionPane.showMessageDialog(rootPane, "Error.");
+            
+        } else {
+
+            JOptionPane.showMessageDialog(rootPane, "Guardado y en espera de confirmacion");
+            update();
+            clean_ven();
+            enable();
+
+        }
         
     }//GEN-LAST:event_bguardarActionPerformed
 
     private void bcancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcancelarActionPerformed
         
-        int value = JOptionPane.showConfirmDialog(rootPane, "Desea cancelar la operacion?");
+        int value = JOptionPane.showConfirmDialog(rootPane, "Desea cancelar y borrar la operacion?");
         
-        if (value == 0) {
+        switch (value) {
             
-            venta = getInt(tfventa.getText());
-            dv.DeleteAll(venta);
-            Ventas_C res = v.Search(String.valueOf(venta));
-            
-            if (res == null) {
-                
-                clean_ven();
-                clean_mer();
-                
-            } else {
-            
-                String val = tfventa.getText();
-                v.Delete(String.valueOf(val));
-                clean_ven();
-                clean_mer();
-                update();
-            
-            }
-            
-        } else if (value == 1) {
-        
-        } else {
-        
+            case 0:
+
+                venta = getInt(tfventa.getText());
+                dv.DeleteAll(venta);
+                Ventas_C res = v.Search(String.valueOf(venta));
+
+                if (res == null) {
+
+                    clean_ven();
+                    clean_mer();
+
+                } else {
+
+                    String val = tfventa.getText();
+                    v.Delete(String.valueOf(val));
+                    clean_ven();
+                    clean_mer();
+                    update();
+
+                }
+                break;
+
+            case 1:
+
+                break;
+
+            default:
+
         }
         
     }//GEN-LAST:event_bcancelarActionPerformed
@@ -679,7 +775,9 @@ public class DetalleVentas_V extends javax.swing.JFrame {
                 String mer = String.valueOf(dtm.getValueAt(selrow, 0));
                 int id = getInt(m.ConsultID(mer));
                 dv.Delete(String.valueOf(id));
-                
+                this.tfventa.setEditable(false);
+                this.tfclientename.setEditable(false);
+                this.tfvendedorname.setEditable(false);
                 update();
                 star();
                 sum();
@@ -690,12 +788,7 @@ public class DetalleVentas_V extends javax.swing.JFrame {
             
             }
             
-            this.update();
-            this.star();
-            this.sum();
-            
-            
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
             
             System.err.println(e.getMessage());
             
@@ -723,6 +816,193 @@ public class DetalleVentas_V extends javax.swing.JFrame {
         vm.setVisible(true);
         
     }//GEN-LAST:event_bbuscarmercaderiaActionPerformed
+
+    private void jbmodificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbmodificarActionPerformed
+
+        this.enable();
+        this.jbactualizar.requestFocus();
+        this.jbactualizar.setEnabled(true);
+        
+    }//GEN-LAST:event_jbmodificarActionPerformed
+
+    private void jbactualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbactualizarActionPerformed
+        
+        //Datos que NO requieren de reconfirmacion de venta
+        venta = getInt(tfventa.getText());
+        cliente = getInt(tfcliente.getText());
+        factura = tffactura.getText();
+        funcionario = getInt(tfvendedor.getText());
+        fecha = tffecha.getText();
+        
+        //Si estos valores cambia, si sera necesario una reconfirmacion de venta
+        int mont_act = dv.Suma(venta);
+        int mont_ant = v.consultAmount(venta);
+        
+        
+        Ventas_C res = v.Search(String.valueOf(venta));
+        
+        if (res == null) {
+            
+            JOptionPane.showMessageDialog(rootPane, "Venta un no guardada");
+            
+        } else {
+        
+            if ((fecha.equals(res.getFecha()) && factura.equals(res.getFactura()))
+                && (cliente == res.getId_cliente()) && (funcionario == res.getId_vendedor())) {
+            
+                JOptionPane.showMessageDialog(rootPane, "No se cambiaron los datos de la factura");
+            
+            }
+
+            if (mont_act != mont_ant) {
+            
+                estado = 0;
+                JOptionPane.showMessageDialog(rootPane, "Se ajusto el monto total de la venta.\n"
+                + "Favor, volver a confirmar la venta");
+
+            }
+
+            Ventas_C values = new Ventas_C(venta, fecha, factura, monto, cliente, funcionario, estado);
+            
+            if (values != res){
+                
+                values.Update();
+                this.jbactualizar.setEnabled(false);
+
+            }
+        
+        }
+        
+        
+    }//GEN-LAST:event_jbactualizarActionPerformed
+
+    private void jbcerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbcerrarActionPerformed
+        
+        dispose();
+        
+    }//GEN-LAST:event_jbcerrarActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        
+        int value = getInt(tfinicio.getText());
+        
+        switch (value) {
+            
+            case 0:
+
+                update();
+                star();
+                sum();
+                count();
+                this.tfventa.setEditable(false);
+                this.tfclientename.setEditable(false);
+                this.tfvendedorname.setEditable(false);
+                this.jbmodificar.setEnabled(false);
+                this.jbactualizar.setEnabled(false);
+                this.tfinicio.setVisible(false);
+                this.jTextField1.setVisible(false);
+                break;
+            
+            case 1:
+
+                this.bguardar.setEnabled(false);
+                this.bcancelar.setEnabled(false);
+                this.bsave.setEnabled(false);
+                update();
+                this.tfventa.setEditable(false);
+                enable();
+                star();
+                sum();
+                break;
+
+            case 2:
+
+                break;
+
+            case 3:
+
+                disable();
+                update();
+                star();
+                sum();
+                this.bsacar.setEnabled(false);
+                this.bcancelar.setEnabled(false);
+                this.bguardar.setEnabled(false);
+                this.jbmodificar.setEnabled(false);
+                this.jbactualizar.setEnabled(false);
+                this.bcargar.setEnabled(false);
+
+            default:
+
+                break;
+            
+        }
+        
+    }//GEN-LAST:event_formWindowActivated
+
+    private void bsaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsaveActionPerformed
+
+        venta = getInt(tfventa.getText());
+        cliente = getInt(tfcliente.getText());
+        funcionario = getInt(tfvendedor.getText());
+        factura = tffactura.getText();
+        fecha = tffecha.getText();
+        System.out.println(factura);
+        if ((cliente == 0) || (funcionario == 0) || (factura.isEmpty())) {
+
+            JOptionPane.showMessageDialog(rootPane, "Quedo algun campo sin completar");
+            
+        } else {
+
+            Ventas_C val = new Ventas_C(venta, fecha, factura, monto, cliente, funcionario, estado);
+            val.Insert();
+            System.out.println("Se cargo exitosamente la la tabla de venta");
+            tfmercaderia.requestFocus();
+            this.jbmodificar.setEnabled(true);
+            this.disable();
+
+        }
+
+    }//GEN-LAST:event_bsaveActionPerformed
+
+    private void tfclienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfclienteKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfclienteKeyTyped
+
+    private void tfvendedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfvendedorKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfvendedorKeyTyped
+
+    private void tfcantdadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfcantdadKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfcantdadKeyTyped
 
     /**
      * @param args the command line arguments
@@ -767,6 +1047,7 @@ public class DetalleVentas_V extends javax.swing.JFrame {
     private javax.swing.JButton bcargar;
     private javax.swing.JButton bguardar;
     private java.awt.Button bsacar;
+    private javax.swing.JButton bsave;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
@@ -781,12 +1062,17 @@ public class DetalleVentas_V extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTextField jTextField1;
+    public static javax.swing.JButton jbactualizar;
+    private javax.swing.JButton jbcerrar;
+    private javax.swing.JButton jbmodificar;
     private javax.swing.JTable tdetalleventa;
     private javax.swing.JTextField tfcantdad;
     public static javax.swing.JTextField tfcliente;
     public static javax.swing.JTextField tfclientename;
     public static javax.swing.JTextField tffactura;
     public static javax.swing.JTextField tffecha;
+    public static javax.swing.JTextField tfinicio;
     public static javax.swing.JTextField tfmercaderia;
     private javax.swing.JTextField tfmonto;
     private javax.swing.JTextField tfprecio;
@@ -805,28 +1091,23 @@ public class DetalleVentas_V extends javax.swing.JFrame {
     private final Mercaderias_C m = new Mercaderias_C();
     private final Funcionarios_C f = new Funcionarios_C();
     DecimalFormat format = new DecimalFormat("#,##0");
-    private int venta, cliente, funcionario, cantidad, precio, preciof;
+    private int venta, cliente, funcionario, cantidad, precio, preciof, estado, monto;
     private String mercaderia, fecha, factura, importe, ajustedesc;
     
     private void star() {
     
         dtm = (DefaultTableModel)tdetalleventa.getModel();
         venta = getInt(tfventa.getText());
-        tfcliente.requestFocus();
         ArrayList<vista_detalle_ventas> res = vdv.Search(venta);
         
         tffecha.setText(Ventas_C.fechaActual());
-        
+                
         for (int i = 0; i < res.size() ; i++) {
             
             dtm.addRow(new Object[] {res.get(i).getProducto(), res.get(i).getCantidad(),
             res.get(i).getPrecio(), res.get(i).getMonto_final()});
             
         }
-        
-        this.tfventa.setEditable(false);
-        this.tfclientename.setEditable(false);
-        this.tfvendedorname.setEditable(false);
     
     }
     
@@ -854,7 +1135,7 @@ public class DetalleVentas_V extends javax.swing.JFrame {
         this.tffactura.setText("");
         this.tfvendedor.setText("");
         this.tfvendedorname.setText("");
-        tfventa.setText(v.New());
+        count();
     
     }
     
@@ -881,7 +1162,31 @@ public class DetalleVentas_V extends javax.swing.JFrame {
         }
         
         tfmonto.setText(format.format(all_value));
+        this.tfmonto.setEditable(false);
         
+    }
+    
+    public void disable () {
+    
+        this.tfcliente.setEditable(false);
+        this.tffactura.setEditable(false);
+        this.tfvendedor.setEditable(false);
+        this.tffecha.setEditable(false);
+        this.bbuscarcliente.setEnabled(false);
+        this.bbuscarvendedor.setEnabled(false);
+        this.bsave.setEnabled(false);
+    
+    }
+    
+    public void enable () {
+    
+        this.tfcliente.setEditable(true);
+        this.tffactura.setEditable(true);
+        this.tfvendedor.setEditable(true);
+        this.tffecha.setEditable(true);
+        this.bbuscarcliente.setEnabled(true);
+        this.bbuscarvendedor.setEnabled(true);
+    
     }
 
     public static Integer getInt(String cadena){

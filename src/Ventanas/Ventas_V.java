@@ -6,6 +6,8 @@
 package Ventanas;
 
 import ContolesVista.vista_ventas;
+import Control.ConfirmarVentas_C;
+import Control.DetalleVentas_C;
 import Control.Ventas_C;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -48,6 +50,7 @@ public class Ventas_V extends javax.swing.JFrame {
         bdelete = new javax.swing.JButton();
         bexit = new javax.swing.JButton();
         bvisual = new javax.swing.JButton();
+        breport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Ventas");
@@ -62,9 +65,17 @@ public class Ventas_V extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Codigo", "Factura", "Cliente", "Monto", "Vendedor", "Fecha", "Estado"
+                "Codigo", "Fecha", "Factura", "Monto", "Cliente", "Vendedor"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tsale.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tsaleMouseClicked(evt);
@@ -98,7 +109,7 @@ public class Ventas_V extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 200;
+        gridBagConstraints.ipadx = 235;
         jPanel1.add(tfsearch, gridBagConstraints);
 
         bsearch.setText("Buscar");
@@ -114,7 +125,7 @@ public class Ventas_V extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         java.awt.GridBagLayout jPanel2Layout = new java.awt.GridBagLayout();
-        jPanel2Layout.columnWidths = new int[] {0, 19, 0, 19, 0, 19, 0, 19, 0};
+        jPanel2Layout.columnWidths = new int[] {0, 19, 0, 19, 0, 19, 0, 19, 0, 19, 0};
         jPanel2Layout.rowHeights = new int[] {0};
         jPanel2.setLayout(jPanel2Layout);
 
@@ -161,7 +172,7 @@ public class Ventas_V extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel2.add(bexit, gridBagConstraints);
@@ -178,6 +189,17 @@ public class Ventas_V extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel2.add(bvisual, gridBagConstraints);
 
+        breport.setText("Ver Reporte");
+        breport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breportActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        jPanel2.add(breport, gridBagConstraints);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -186,11 +208,8 @@ public class Ventas_V extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
-                            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -214,6 +233,10 @@ public class Ventas_V extends javax.swing.JFrame {
             
             dv.setVisible(true);
             this.Count();
+            DetalleVentas_V.tfcliente.setText("");
+            DetalleVentas_V.tffecha.setText("");
+            DetalleVentas_V.tffactura.setText("");
+            DetalleVentas_V.tfvendedor.setText("");
             
         } catch (Exception e) {
             
@@ -242,6 +265,8 @@ public class Ventas_V extends javax.swing.JFrame {
                 DetalleVentas_V.tffecha.setText(finded.getFecha());
                 DetalleVentas_V.tffactura.setText(finded.getFactura());
                 DetalleVentas_V.tfvendedor.setText(String.valueOf(finded.getId_vendedor()));
+                DetalleVentas_V.tfinicio.setText("1");
+                DetalleVentas_V.jbactualizar.setEnabled(true);
                 
             }
             
@@ -262,7 +287,18 @@ public class Ventas_V extends javax.swing.JFrame {
             if (selrow != -1) {
                 
                 String id = String.valueOf(dtm.getValueAt(selrow, 0).toString());
+                cv.Delete(id);
+                
+                DetalleVentas_C venta = d_v.searchVenta(id);
+                
+                if (venta != null) {
+                    
+                    d_v.DeleteAll(getInt(id));
+                    
+                }
+                
                 v.Delete(id);
+                
                 JOptionPane.showMessageDialog(rootPane, "Registro Eliminado");
                 
             } else {
@@ -277,7 +313,7 @@ public class Ventas_V extends javax.swing.JFrame {
             
         } catch (Exception e) {
             
-            System.err.println(e);
+            System.err.println(e.getMessage());
             
         }
         
@@ -290,7 +326,7 @@ public class Ventas_V extends javax.swing.JFrame {
         
         if (selrow != -1) {
             
-            String id = String.valueOf(dtm.getValueAt(selrow, 0).toString());
+            String id = String.valueOf(dtm.getValueAt(selrow, 0));
             Ventas_C finded = v.Search(id);
             
             if (!(finded == null)) {
@@ -302,11 +338,9 @@ public class Ventas_V extends javax.swing.JFrame {
                 DetalleVentas_V.tffecha.setText(finded.getFecha());
                 DetalleVentas_V.tffactura.setText(finded.getFactura());
                 DetalleVentas_V.tfvendedor.setText(String.valueOf(finded.getId_vendedor()));
+                DetalleVentas_V.tfinicio.setText("3");
                 
             }
-            
-            this.update();
-            this.star();
             
         }
         
@@ -352,6 +386,7 @@ public class Ventas_V extends javax.swing.JFrame {
         
         update();
         star();
+        this.tsale.isVisible();
         
     }//GEN-LAST:event_formWindowOpened
 
@@ -364,6 +399,12 @@ public class Ventas_V extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_tsaleMouseClicked
+
+    private void breportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breportActionPerformed
+        
+        vv.showVentas();
+
+    }//GEN-LAST:event_breportActionPerformed
 
     /**
      * @param args the command line arguments
@@ -411,6 +452,7 @@ public class Ventas_V extends javax.swing.JFrame {
     private javax.swing.JButton bdelete;
     private javax.swing.JButton bexit;
     private javax.swing.JButton bnew;
+    private javax.swing.JButton breport;
     private javax.swing.JButton bsearch;
     private javax.swing.JButton bupdate;
     private javax.swing.JButton bvisual;
@@ -425,6 +467,8 @@ public class Ventas_V extends javax.swing.JFrame {
 
     DefaultTableModel dtm;
     private final Ventas_C v = new Ventas_C();
+    private final ConfirmarVentas_C cv = new ConfirmarVentas_C();
+    private final DetalleVentas_C d_v = new DetalleVentas_C();
     private final vista_ventas vv = new vista_ventas();
     private final DetalleVentas_V dv = new DetalleVentas_V();
     
@@ -458,23 +502,36 @@ public class Ventas_V extends javax.swing.JFrame {
     public void search (String search) {
         
         String options = (String)cbsearch.getSelectedItem();
+        dtm = (DefaultTableModel) tsale.getModel();
+        ArrayList<vista_ventas> list = null;
         
         switch (options) {
-            
-            case "Codigo" : 
-                DefaultTableModel model4id = v.Search4ID(search);
-                tsale.setModel(model4id);
+            case "Codigo":
+                list = vv.SearchCodigo(search);                
                 break;
-                
-            case "Cliente" : 
-                DefaultTableModel model4name = v.Search4Client(search);
-                tsale.setModel(model4name);
+
+            case "Cliente":
+                list = vv.SearchCliente(search);
                 break;
-                
+
             case "Vendedor":
-                DefaultTableModel model4ci = v.Search4Seller(search);
-                tsale.setModel(model4ci);
+                list = vv.SearchVendedor(search);
+                break;
+
+        }
         
+        if (list != null) {
+
+            update();
+
+            for(int i=0; i < list.size(); i++ ){
+            
+                dtm.addRow(new Object[]{list.get(i).getCodigo(), list.get(i).getFactura(),
+                list.get(i).getCliente(), list.get(i).getMonto(), list.get(i).getVendedor(),
+                list.get(i).getFecha()});
+
+            }
+
         }
     
     }

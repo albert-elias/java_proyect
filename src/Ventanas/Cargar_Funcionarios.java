@@ -13,6 +13,7 @@ import Ventanas.Funcionarios_V;
 import Vistas.vista_usuarios;
 import Vistas.vista_ciudades;
 import Vistas.vista_ciudades1;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -78,18 +79,18 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Datos del Funcionario");
         addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
             }
         });
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Tomar Datos"));
 
-        jLabel1.setText("Codigo");
+        jLabel1.setText("Codigo *");
 
-        jLabel2.setText("Nombre");
+        jLabel2.setText("Nombre *");
 
-        jLabel3.setText("Cedula");
+        jLabel3.setText("Cedula *");
 
         jLabel4.setText("Telefono");
 
@@ -98,6 +99,9 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
         tfcode.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfcodeKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfcodeKeyTyped(evt);
             }
         });
 
@@ -125,7 +129,7 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
             }
         });
 
-        jLabel6.setText("Cargo");
+        jLabel6.setText("Cargo *");
 
         jLabel7.setText("Cod. Ciudad");
 
@@ -146,11 +150,17 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfcityKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfcityKeyTyped(evt);
+            }
         });
 
         tfuser.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfuserKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfuserKeyTyped(evt);
             }
         });
 
@@ -175,22 +185,6 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(9, 9, 9)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(41, 41, 41)
-                        .addComponent(tfcode, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(23, 23, 23)
-                        .addComponent(jLabel2)
-                        .addGap(104, 104, 104)
-                        .addComponent(tfname, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(41, 41, 41)
-                        .addComponent(tfidentification, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20)
-                        .addComponent(jLabel4)
-                        .addGap(102, 102, 102)
-                        .addComponent(tftelephone, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(31, 31, 31)
@@ -218,19 +212,37 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
                         .addGap(105, 105, 105)
                         .addComponent(tfusername, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(12, 12, 12)
-                        .addComponent(bsearchusu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(bsearchusu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel1))
+                        .addGap(32, 32, 32)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(tfidentification, javax.swing.GroupLayout.PREFERRED_SIZE, 69, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20)
+                                .addComponent(jLabel4))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(tfcode, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel2)))
+                        .addGap(97, 97, 97)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tfname, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tftelephone, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tfcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(tfname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(tfcode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel2)
+                        .addComponent(tfname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(3, 3, 3)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))))
+                        .addComponent(jLabel1)))
                 .addGap(10, 10, 10)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(tfidentification, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -367,7 +379,9 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
 
         this.updateOffice();
         this.star();
+        this.clean();
         this.Count();
+        this.tfcode.setEditable(false);
         this.tfname.requestFocus();
         
     }//GEN-LAST:event_bnewActionPerformed
@@ -386,11 +400,16 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
             office = getInt(jTextField1.getText());
             user = getInt(tfuser.getText());
 
-            if ((code <= 0) || (name.isEmpty()) || (ci.isEmpty())) {
+            if ((code <= 0) || (name.isEmpty()) || (ci.isEmpty()) || (office == -1)) {
 
-                JOptionPane.showMessageDialog(rootPane, "No registrada \nComplete todos los campos");
+                JOptionPane.showMessageDialog(rootPane, "No registrada \nComplete los campos obligatorios");
 
             } else {
+
+                if (telephone.isEmpty()) { telephone = "Sin asignar"; }
+                if (direction.isEmpty()) { direction = "Sin especificar"; }
+                if (city == 0) { city = 1; }
+                if (user == 0) { city = 1; }
 
                 Funcionarios_C cod = new Funcionarios_C(code, name, ci, telephone, direction, city, office, user);
                 Funcionarios_C ok = cod.Search(String.valueOf(code));
@@ -400,7 +419,10 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
                     if (cod.Insert()) {
 
                         JOptionPane.showMessageDialog(rootPane, "Registrado con exito");
+                        this.tfcode.setText("");
                         this.clean();
+                        updateOffice();
+                        star();
 
                     } else {
 
@@ -418,7 +440,7 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
 
             }
             
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
         
             System.err.println(e);
         
@@ -437,18 +459,33 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
         city = getInt(tfcity.getText());
         office = getInt(jTextField1.getText());
         user = getInt(tfuser.getText());
-        Funcionarios_C fun = new Funcionarios_C(code, name, ci, telephone, direction, city, office, user);
         
-        if (fun.Update()) {
-            
-            JOptionPane.showMessageDialog(rootPane, "Registro modficado");
-            this.star();
-            
+        if ((code <= 0) || (name.isEmpty()) || (ci.isEmpty()) || (office <=0)) {
+
+            JOptionPane.showMessageDialog(rootPane, "No se pudo modificar. \nLos campos obligatorios no pueden quedar nulos");
+
         } else {
+
+            if (telephone.isEmpty()) { telephone = "Sin asignar"; }
+            if (direction.isEmpty()) { direction = "Sin asignar"; }
+            if (city == 0) { city = 1; }
+            if (user == 0) { city = 1; }
+
+            Funcionarios_C fun = new Funcionarios_C(code, name, ci, telephone, direction, city, office, user);
+
+            if (fun.Update()) {
+            
+                JOptionPane.showMessageDialog(rootPane, "Registro modficado");
+                updateOffice();
+                this.star();
+            
+            } else {
+
+                JOptionPane.showMessageDialog(rootPane, "No modificado");
         
-            JOptionPane.showMessageDialog(rootPane, "No modificado");
-        
+            }
         }
+        
         
     }//GEN-LAST:event_bupdateActionPerformed
 
@@ -456,15 +493,10 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
         
         this.clean();
         this.dispose();
+        this.tfcode.setEditable(false);
 
         
     }//GEN-LAST:event_bcancelActionPerformed
-
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-
-        this.star();
-        
-    }//GEN-LAST:event_formWindowOpened
 
     private void tfcodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfcodeKeyPressed
         
@@ -649,7 +681,7 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
 
             }
             
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
             
             System.err.println(e);
             
@@ -684,7 +716,7 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
 
             }
             
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
             
             System.err.println(e);
             
@@ -724,6 +756,81 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
        
     }//GEN-LAST:event_bsearchusuActionPerformed
 
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        
+        int value = getInt(jTextField1.getText());
+
+        switch (value) {
+
+            case 1:
+
+                this.bupdate.setEnabled(true);
+                updateOffice();
+                star();
+
+//                this.tfcode.setEditable(false);
+//                code = getInt(tfcode.getText());
+//                Funcionarios_C res = f.Search(String.valueOf(code));
+//                int id = res.getJob();
+//                CargosC val = c.Search(String.valueOf(id));
+//                String item = val.getName();
+//                this.cboffice.addItem(item);
+                
+                break;
+
+            case 0:
+
+                updateOffice();
+                star();
+                getValueCB();
+
+                break;
+
+            default:
+                
+        }
+
+    }//GEN-LAST:event_formWindowActivated
+
+    private void tfcodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfcodeKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfcodeKeyTyped
+
+    private void tfcityKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfcityKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfcityKeyTyped
+
+    private void tfuserKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfuserKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfuserKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -761,11 +868,11 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bcancel;
-    private javax.swing.JButton bnew;
-    private javax.swing.JButton bsave;
+    public static javax.swing.JButton bnew;
+    public static javax.swing.JButton bsave;
     private java.awt.Button bsearchc;
     private java.awt.Button bsearchusu;
-    private javax.swing.JButton bupdate;
+    public static javax.swing.JButton bupdate;
     public static javax.swing.JComboBox cboffice;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -779,7 +886,7 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
+    public static javax.swing.JTextField jTextField1;
     public static javax.swing.JTextField tfcity;
     public static javax.swing.JTextField tfcityname;
     public static javax.swing.JTextField tfcode;
@@ -816,7 +923,6 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
     
         this.tfcity.setText("");
         this.tfcityname.setText("");
-        this.tfcode.setText("");
         this.tfdirection.setText("");
         this.tfidentification.setText("");
         this.tfname.setText("");
@@ -828,7 +934,14 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
     
     private void getValueCB () {
     
-        String cargo = cboffice.getSelectedItem().toString().trim();
+        if (cboffice.getSelectedItem() == null) {
+
+            jTextField1.setText("-1");
+            return;
+
+        }
+
+        String cargo = cboffice.getSelectedItem().toString();
         CargosC result = c.ConsultId(cargo);
         
         if (!(result == null)) {
@@ -862,6 +975,8 @@ public class Cargar_Funcionarios extends javax.swing.JFrame {
         }
         
         this.cboffice.setSelectedIndex(-1);
+        this.tfcityname.setEditable(false);
+        this.tfusername.setEditable(false);
         
     }
     

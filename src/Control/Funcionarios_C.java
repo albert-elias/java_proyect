@@ -11,6 +11,7 @@ import Modelos.Funcionarios_M;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -137,7 +138,7 @@ public class Funcionarios_C extends Funcionarios_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Funcionarios_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -165,7 +166,7 @@ public class Funcionarios_C extends Funcionarios_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             
@@ -252,218 +253,6 @@ public class Funcionarios_C extends Funcionarios_M {
         }
         
         return name;
-    
-    }
-    
-    public DefaultTableModel Search4ID (String search) {
-        
-        String [] items = {"codigo", "nombre", "ci", "telefono", "direccion", "ciudad", "cargo", "usuario"};
-        String [] files = new String [8];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from funcionarios where id like '%"+search+"%'";
-        
-        try {
-            
-            ps = rutaConec.prepareStatement(querySQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("nombre");
-                files [2] = rs.getString("ci");
-                files [3] = rs.getString("telefono");
-                files [4] = rs.getString("direccion");
-                files [5] = rs.getString("ciudades_id");
-                files [6] = rs.getString("cargos_id");
-                files [7] = rs.getString("usuarios_id");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception e) {
-            
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
-            
-        }
-        
-        return model;
-    
-    }
-    
-    public DefaultTableModel Search4Name (String search) {
-        
-        String [] items = {"codigo", "nombre", "ci", "telefono", "direccion", "ciudad", "cargo", "usuario"};
-        String [] files = new String [8];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from funcionarios where nombre like '%"+search+"%'";
-        
-        try {
-            
-            ps = rutaConec.prepareStatement(querySQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("nombre");
-                files [2] = rs.getString("ci");
-                files [3] = rs.getString("telefono");
-                files [4] = rs.getString("direccion");
-                files [5] = rs.getString("ciudades_id");
-                files [6] = rs.getString("cargo_id");
-                files [7] = rs.getString("usuarios_id");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception e) {
-            
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
-            
-        }
-        
-        return model;
-    
-    }
-    
-    public DefaultTableModel Search4Ci (String search) {
-        
-        String [] items = {"codigo", "nombre", "ci", "telefono", "direccion", "ciudad", "cargo", "usuario"};
-        String [] files = new String [8];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from funcionarios where ci like '%"+search+"%'";
-        
-        try {
-            
-            ps = rutaConec.prepareStatement(querySQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("nombre");
-                files [2] = rs.getString("ci");
-                files [3] = rs.getString("telefono");
-                files [4] = rs.getString("direccion");
-                files [5] = rs.getString("ciudades_id");
-                files [6] = rs.getString("cargos_id");
-                files [7] = rs.getString("usuario_id");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception e) {
-            
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
-            
-        }
-        
-        return model;
-    
-    }
-    
-    public DefaultTableModel Search4Teleph (String search) {
-        
-        String [] items = {"codigo", "nombre", "ci", "telefono", "direccion", "ciudad", "cargo", "usuario"};
-        String [] files = new String [8];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from funcionarios where telefono like '%"+search+"%'";
-        
-        try {
-            
-            ps = rutaConec.prepareStatement(querySQL);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("nombre");
-                files [2] = rs.getString("ci");
-                files [3] = rs.getString("telefono");
-                files [4] = rs.getString("direccion");
-                files [5] = rs.getString("ciudades_id");
-                files [6] = rs.getString("cargos_id");
-                files [7] = rs.getString("usuarios_id");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception e) {
-            
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
-            
-        }
-        
-        return model;
     
     }
     

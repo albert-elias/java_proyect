@@ -11,11 +11,20 @@ import Modelos.Ciudades_M;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
+
 
 /**
  *
@@ -73,7 +82,7 @@ public class Ciudades_C extends Ciudades_M {
                 
             } 
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ciudades_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -101,7 +110,7 @@ public class Ciudades_C extends Ciudades_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ciudades_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -129,7 +138,7 @@ public class Ciudades_C extends Ciudades_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ciudades_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -155,7 +164,33 @@ public class Ciudades_C extends Ciudades_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
+            
+            System.err.println(ex);
+            
+        }
+        
+        return val;
+        
+    }
+
+    public Ciudades_C consultCiudad (String cod) {
+        
+        Ciudades_C val = null;
+        
+        try {
+            
+            querySQL = "select * from ciudades where nombre ='"+cod+"'";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {
+                
+                val = new Ciudades_C(rs.getInt("id"), rs.getString("nombre"));
+                
+            }
+            
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             
@@ -181,12 +216,40 @@ public class Ciudades_C extends Ciudades_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(CargosC.class.getName()).log(Level.SEVERE, null, ex);
             
         }
+
         return all;
+
+    }
+
+    public ArrayList <Ciudades_C> Consult (String search){
+        
+        ArrayList<Ciudades_C> all = new ArrayList<>();
+        
+        try {
+            
+            querySQL = "select * from ciudades where nombre like '%"+search+"%'";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {
+                
+                all.add(new Ciudades_C(rs.getInt("codigo"), rs.getString("nombre")));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            Logger.getLogger(Ciudades_C.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+
+        return all;
+
     }
     
     public String New () {
@@ -205,7 +268,7 @@ public class Ciudades_C extends Ciudades_M {
             }
             
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ciudades_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -231,7 +294,7 @@ public class Ciudades_C extends Ciudades_M {
                 
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
             System.err.println(e + "Error");
             
@@ -240,36 +303,25 @@ public class Ciudades_C extends Ciudades_M {
         return name;
     
     }
-    
-    public DefaultTableModel Consult (String name) {
-        
-        String [] items = {"id", "nombre"};
-        String [] files = new String [2];
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        
+
+    public void showCiudades(){
+
+        String ubication = "C:\\Users\\User\\JaspersoftWorkspace\\estoy\\ciudades.jasper";
+  
         try {
-            
-            querySQL = "select * from ciudades where nombre like '"+name+"%'";
-            state = rutaConec.createStatement();
-            rs = state.executeQuery(querySQL);
-            
-            while (rs.next()) {
-                
-                files [0] = rs.getString("id");
-                files [1] = rs.getString("nombre");
-                
-                model.addRow(files);
-                
-            }
-            
-        } catch (Exception ex) {
-            
-            System.err.println(ex);
-            
+
+            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(ubication); 
+            JasperPrint jp = JasperFillManager.fillReport(report, null, rutaConec); 
+            JasperViewer view = new JasperViewer(jp, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+            view.setVisible(true);
+
+        } catch (JRException e) {
+
+            System.out.println(e.getMessage());
+
         }
-        
-        return model;
-        
+
     }
     
 }

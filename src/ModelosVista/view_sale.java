@@ -13,20 +13,21 @@ public class view_sale {
     
     public int codigo;
     public String factura, cliente;
-    public int monto, valor;
+    public int monto;
     public String vendedor, fecha;
+    public int estado;
 
     public view_sale() {
     }
 
-    public view_sale(int codigo, String factura, String cliente, int monto, int valor, String vendedor, String fecha) {
+    public view_sale(int codigo, String factura, String cliente, int monto, String vendedor, String fecha, int estado) {
         this.codigo = codigo;
         this.factura = factura;
         this.cliente = cliente;
         this.monto = monto;
-        this.valor = valor;
         this.vendedor = vendedor;
         this.fecha = fecha;
+        this.estado = estado;
     }
 
     public int getCodigo() {
@@ -60,14 +61,6 @@ public class view_sale {
     public void setMonto(int monto) {
         this.monto = monto;
     }
-
-    public int getValor() {
-        return valor;
-    }
-
-    public void setValor(int valor) {
-        this.valor = valor;
-    }
     
     public String getVendedor() {
         return vendedor;
@@ -84,7 +77,13 @@ public class view_sale {
     public void setFecha(String fecha) {
         this.fecha = fecha;
     }
-    
-    
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
     
 }

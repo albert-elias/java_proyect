@@ -6,6 +6,7 @@
 package Ventanas;
 
 import Control.AperturaCierre_C;
+import Control.Funcionarios_C;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -51,6 +52,7 @@ public class AperturaCierre_V extends javax.swing.JFrame {
         brefresh = new javax.swing.JButton();
         bexit = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
+        breport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -68,7 +70,15 @@ public class AperturaCierre_V extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Fecha", "Total Recaudado", "Funcionario"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         topenclose.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 topencloseMouseClicked(evt);
@@ -114,6 +124,9 @@ public class AperturaCierre_V extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfcodeKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfcodeKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
@@ -145,6 +158,9 @@ public class AperturaCierre_V extends javax.swing.JFrame {
         tfjob.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 tfjobKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfjobKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -210,20 +226,29 @@ public class AperturaCierre_V extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
         jPanel1.add(jLabel6, gridBagConstraints);
 
+        breport.setText("Ver Reporte");
+        breport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breportActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 374, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
                 .addGap(118, 118, 118)
                 .addComponent(jLabel1)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(breport))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -233,8 +258,10 @@ public class AperturaCierre_V extends javax.swing.JFrame {
                 .addGap(4, 4, 4)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(breport)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -247,13 +274,20 @@ public class AperturaCierre_V extends javax.swing.JFrame {
         fecha = tfdate.getText();
         total = tfcollected.getText();
         fun = Integer.parseInt(tfjob.getText());
+        Funcionarios_C res = f.Search(String.valueOf(fun));
         
         if ((id <= 0) && (fecha.isEmpty()) && (fun <=0)) {
             
             JOptionPane.showMessageDialog(rootPane, "Complete los campos");
             
-        } else {
+        } else if (res != null) {
         
+            if (total.isEmpty()) {
+
+                total = String.valueOf(0);
+                
+            }
+
             AperturaCierre_C ap = new AperturaCierre_C(id, fecha, total, fun);
             AperturaCierre_C already = ap.Search(String.valueOf(id));
             
@@ -285,6 +319,11 @@ public class AperturaCierre_V extends javax.swing.JFrame {
             }
             
         
+        } else {
+
+            JOptionPane.showMessageDialog(rootPane, "El codigo del funcionario no existe.");
+            tfjob.requestFocus();
+
         }
         
     }//GEN-LAST:event_bsaveActionPerformed
@@ -305,19 +344,41 @@ public class AperturaCierre_V extends javax.swing.JFrame {
         fecha = tfdate.getText();
         total = tfcollected.getText();
         fun = getInt(tfjob.getText());
+        Funcionarios_C info = f.Search(String.valueOf(fun));
         
-        AperturaCierre_C apci = new AperturaCierre_C(id, fecha, total, fun);
-        if(apci.Update()){
+        if ((id <= 0) && (fecha.isEmpty()) && (fun <=0)) {
             
-            JOptionPane.showMessageDialog(rootPane, "Registro modficado");
-            this.update();
-            this.star();
-            
+            JOptionPane.showMessageDialog(rootPane, "Error");
+
+        } else if (info != null) {
+
+            if (total.isEmpty()) {
+
+                total = String.valueOf(0);
+                
+            }
+
+            AperturaCierre_C apci = new AperturaCierre_C(id, fecha, total, fun);
+
+            if(apci.Update()){
+
+                JOptionPane.showMessageDialog(rootPane, "Registro modficado");
+                this.update();
+                this.star();
+
+            } else {
+
+                JOptionPane.showMessageDialog(rootPane, "No modificado");
+
+            }
+
         } else {
-            
-            JOptionPane.showMessageDialog(rootPane, "No modificado");
-            
+
+            JOptionPane.showMessageDialog(rootPane, "No modificado.\nCodigo del Funcionario no existe.");
+            tfjob.requestFocus();
+
         }
+        
         
     }//GEN-LAST:event_brefreshActionPerformed
 
@@ -424,6 +485,38 @@ public class AperturaCierre_V extends javax.swing.JFrame {
         
     }//GEN-LAST:event_formWindowOpened
 
+    private void breportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breportActionPerformed
+        
+        ac.showApC();
+
+    }//GEN-LAST:event_breportActionPerformed
+
+    private void tfcodeKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfcodeKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfcodeKeyTyped
+
+    private void tfjobKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfjobKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfjobKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -462,6 +555,7 @@ public class AperturaCierre_V extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bexit;
     private javax.swing.JButton brefresh;
+    private javax.swing.JButton breport;
     private javax.swing.JButton bsave;
     private javax.swing.JButton bupdate;
     private javax.swing.JLabel jLabel1;
@@ -483,6 +577,7 @@ public class AperturaCierre_V extends javax.swing.JFrame {
     public int id, fun;
     public String fecha, total;
     private final AperturaCierre_C ac = new AperturaCierre_C();
+    private final Funcionarios_C f = new Funcionarios_C();
     
     public void Count () {
     

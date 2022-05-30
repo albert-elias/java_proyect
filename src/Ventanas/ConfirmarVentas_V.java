@@ -12,10 +12,8 @@ import ContolesVista.vista_ventas;
 import Control.ConfirmarVentas_C;
 import Control.ModoPago_C;
 import Control.Ventas_C;
-import Modelos.Ventas_M;
 import ModelosVista.view_confirm;
 import ModelosVista.view_modepay;
-import ModelosVista.view_sale;
 import java.awt.event.ItemEvent;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -43,7 +41,6 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jScrollPane1 = new javax.swing.JScrollPane();
         tconfirmvent = new javax.swing.JTable();
@@ -59,6 +56,9 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
         bconfirm = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         tdetalle = new javax.swing.JTable();
+        bupdate = new javax.swing.JButton();
+        bdelete = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Confirmar Ventas");
@@ -75,7 +75,15 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
             new String [] {
                 "Venta", "Cliente", "Vendedor"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, true
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         tconfirmvent.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tconfirmventMouseClicked(evt);
@@ -84,34 +92,14 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
         jScrollPane1.setViewportView(tconfirmvent);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        java.awt.GridBagLayout jPanel1Layout = new java.awt.GridBagLayout();
-        jPanel1Layout.columnWidths = new int[] {0, 7, 0, 7, 0};
-        jPanel1Layout.rowHeights = new int[] {0, 10, 0, 10, 0};
-        jPanel1.setLayout(jPanel1Layout);
 
         jLabel1.setText("Modo de pago");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        jPanel1.add(jLabel1, gridBagConstraints);
 
         cbmode.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 cbmodeItemStateChanged(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 76;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        jPanel1.add(cbmode, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 100;
-        gridBagConstraints.weightx = 0.2;
-        jPanel1.add(tfmontres, gridBagConstraints);
 
         baccept.setText("Aceptar");
         baccept.addActionListener(new java.awt.event.ActionListener() {
@@ -119,42 +107,81 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
                 bacceptActionPerformed(evt);
             }
         });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 34;
-        jPanel1.add(baccept, gridBagConstraints);
 
         bcancel.setText("Cancelar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 26;
-        jPanel1.add(bcancel, gridBagConstraints);
+        bcancel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcancelActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Venta Seleccionada:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_END;
-        jPanel1.add(jLabel2, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.ipadx = 98;
-        jPanel1.add(tfcodevent, gridBagConstraints);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.ipadx = 100;
-        jPanel1.add(tfmont, gridBagConstraints);
+
+        tfmont.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                tfmontKeyTyped(evt);
+            }
+        });
 
         bconfirm.setText("Confirmar");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.ipadx = 25;
-        jPanel1.add(bconfirm, gridBagConstraints);
+        bconfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bconfirmActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jLabel2)
+                        .addGap(7, 7, 7)
+                        .addComponent(tfcodevent, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(tfmontres, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(16, 16, 16)
+                        .addComponent(jLabel1)
+                        .addGap(24, 24, 24)
+                        .addComponent(cbmode, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(tfmont, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(bcancel, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(bconfirm, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(11, 11, 11)
+                        .addComponent(baccept, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(5, 5, 5)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel2))
+                    .addComponent(tfcodevent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfmontres, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(3, 3, 3)
+                        .addComponent(jLabel1))
+                    .addComponent(cbmode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(tfmont, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bcancel)
+                    .addComponent(bconfirm)
+                    .addComponent(baccept))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         tdetalle.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -163,26 +190,76 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
             new String [] {
                 "Modo de Pago", "Monto"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tdetalle.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tdetalleMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tdetalle);
+
+        bupdate.setText("Modificar");
+        bupdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bupdateActionPerformed(evt);
+            }
+        });
+        bupdate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                bupdateKeyTyped(evt);
+            }
+        });
+
+        bdelete.setText("Eliminar");
+        bdelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bdeleteActionPerformed(evt);
+            }
+        });
+
+        jPanel2.setBackground(new java.awt.Color(153, 153, 153));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE))
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 331, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addComponent(bupdate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(bdelete)
+                        .addGap(26, 26, 26))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,16 +268,21 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 95, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(bdelete)
+                    .addComponent(bupdate)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void tconfirmventMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tconfirmventMouseClicked
-        
+
         dtm = (DefaultTableModel) tconfirmvent.getModel();
         int selrow = tconfirmvent.getSelectedRow();
         
@@ -208,30 +290,28 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
             
             this.baccept.setEnabled(true);
             String id = tconfirmvent.getValueAt(selrow, 0).toString();
-            Ventas_C v = new Ventas_C();
             Ventas_C value = v.Search(id);
             
             if (!(value == null)) {
                 
                 unvalid();
                 tfcodevent.setText(String.valueOf(value.getId()));
-                int codigo = getInt(tfcodevent.getText());
-                vista_detalle_ventas vdv = new vista_detalle_ventas();
-                int mont = getInt(vdv.ConsultMonto(codigo));
-                System.out.println(mont);
-                tfmontres.setText(format.format(mont));
-                System.out.println(tfmontres.getText());
+                this.updatePrice();
                 
             }
+            
+            this.star2();
+            this.update2();
+            this.star2();
             
         }
         
     }//GEN-LAST:event_tconfirmventMouseClicked
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
+    
+        update();
         star();
-        star2();
         cb_valid();
         unvalid();
         
@@ -242,43 +322,52 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
         code = getInt(tfcodevent.getText());
         modopago = cbmode.getSelectedIndex()+1;
         monto = getInt(tfmont.getText());
-        precio = getInt(tfmontres.getText().trim());
+        
+        int price = getInt(vdv.ConsultMonto(code));
+        int rest = getInt(cv.Rest(code));
+        precio = getInt(String.valueOf(price-rest));
+        
+        ConfirmarVentas_C cons = cv.Consult(modopago, code);
+        
         int count = getInt(cv.Count(code));
         
-        if (modopago > 0) {
+        if ((modopago > 0) && (cons == null)) {
         
             if (monto > 0) {
                 
-                if (count == 2) {
-                    
-                    if (monto < precio) {
+                if ((count == 2) && (monto < precio)) {
                         
-                        JOptionPane.showMessageDialog(tconfirmvent, "Limite de la forma de pago alcanzada \nPague la totalidad del restante");
-                        
-                    }
+                    JOptionPane.showMessageDialog(tconfirmvent, "Limite de la"
+                    + "forma de pago alcanzada \nPague la totalidad del restante");
                     
                 } else {
                 
                     if (monto <= precio) {
-                    
-                    ConfirmarVentas_C values = new ConfirmarVentas_C(modopago, code, monto);
-                    values.Insert();
-                    int res = precio - monto;
-                        
-                        if (res <= 0) {
-                            
-                            tfmontres.setText("0");
+
+                        this.bcancel.setEnabled(true);
+                        ConfirmarVentas_C values = new ConfirmarVentas_C(modopago, code, monto);
+                        values.Insert();
+                        int res = precio - monto;
+
+                        if (res == 0) {
+
+                            tfmontres.setText(String.valueOf(res));
+                            precio = res;
                             tfmont.setText("0");
                             this.baccept.setEnabled(false);
+                            this.bconfirm.setEnabled(true);
                             this.bconfirm.requestFocus();
-                            
+
                         } else {
-                        
+
                             tfmontres.setText(format.format(res));
                             tfmont.setText("0");
-                            
+
                         }
-                    
+
+                        update2();
+                        star2();
+
                     }
                 
                 }
@@ -291,7 +380,7 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
             
         } else {
         
-            JOptionPane.showMessageDialog(tconfirmvent, "Seleccione un modo de cobro");
+            JOptionPane.showMessageDialog(tconfirmvent, "Modo de pago ya cargado o vacio");
         
         }
         
@@ -303,10 +392,180 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
             
             int id = getInt(mp.ConsultID(String.valueOf(evt.getItem())));
             tfmont.setText(cv.Monto(id));
+            this.tfmont.setText("");
             
         }
         
     }//GEN-LAST:event_cbmodeItemStateChanged
+
+    private void bcancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcancelActionPerformed
+        
+        try {
+            
+            int res = JOptionPane.showConfirmDialog(tconfirmvent, "Desea cacelar?");
+            
+            if (res == 0) {
+                
+                code = getInt(tfcodevent.getText());
+                cv.Delete(String.valueOf(code));
+                update2();
+                star2();
+                clean();
+                
+            }
+            
+        } catch (Exception e) {
+            
+            System.out.println(e.getMessage());
+            
+        }
+        
+    }//GEN-LAST:event_bcancelActionPerformed
+
+    private void bconfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bconfirmActionPerformed
+        
+        code = getInt(tfcodevent.getText());
+        Ventas_C res = v.Search(String.valueOf(code));
+
+            
+        if (res == null) {
+
+        JOptionPane.showMessageDialog(tconfirmvent, "Venta no confirmada");
+
+        } else {
+
+            int venta = res.getId();
+            String fecha = res.getFecha();
+            String fact = res.getFactura();
+            int val = Integer.parseInt(cv.Rest(venta));
+            int cliente = res.getId_cliente();
+            int func = res.getId_vendedor();
+            int confirmar = 1;
+
+            Ventas_C con = new Ventas_C(venta, fecha, fact, val, cliente, func, confirmar);
+
+            if (con.Update()) {
+
+                JOptionPane.showMessageDialog(tconfirmvent, "Venta Confirmada");
+
+            }
+
+            star();
+            update();
+            star();
+
+        }
+
+        star2();
+        update2();
+        
+    }//GEN-LAST:event_bconfirmActionPerformed
+
+    private void bupdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bupdateActionPerformed
+
+        dtm = (DefaultTableModel)tdetalle.getModel();
+        int selected = tdetalle.getSelectedRow();
+        String id = tdetalle.getValueAt(selected, 0).toString();
+        code = getInt(tfcodevent.getText());
+        modopago = getInt(mp.ConsultID(id));
+        String val = JOptionPane.showInputDialog("Nuevo monto:");
+
+       
+        
+        if (val == null) {
+            
+            int response = getInt(val);
+            
+            if (response == JOptionPane.CANCEL_OPTION) {
+                
+                JOptionPane.showMessageDialog(rootPane, "Cancelado");
+                
+            }
+            
+            return;
+            
+        }
+        
+        if (val.equals("")) {
+            
+            JOptionPane.showMessageDialog(tconfirmvent, "Campo vacio");
+            
+        } else {
+        
+            monto = getInt(val);
+            ConfirmarVentas_C values = new ConfirmarVentas_C(modopago, code, monto);
+            
+            if (values.Update()) {
+                
+                updatePrice();
+                this.baccept.setEnabled(true);
+
+            }
+            
+            star2();
+            update2();
+            star2();
+            
+        }
+        
+    }//GEN-LAST:event_bupdateActionPerformed
+
+    private void bdeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bdeleteActionPerformed
+        
+        dtm = (DefaultTableModel)tdetalle.getModel();
+        int selected = tdetalle.getSelectedRow();
+        if (selected != -1) {
+            
+            String id = dtm.getValueAt(selected, 0).toString();
+            modopago = getInt(mp.ConsultID(id));
+            code = getInt(tfcodevent.getText());
+            if (cv.deleteModoPago(modopago, code)) {
+                
+                updatePrice();
+                this.baccept.setEnabled(true);
+                
+            }
+            
+            star2();
+            update2();
+            star2();
+            
+        }
+        
+    }//GEN-LAST:event_bdeleteActionPerformed
+
+    private void tdetalleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tdetalleMouseClicked
+        
+        this.bupdate.setEnabled(true);
+        this.bdelete.setEnabled(true);
+        
+    }//GEN-LAST:event_tdetalleMouseClicked
+
+    private void tfmontKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfmontKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_tfmontKeyTyped
+
+    private void bupdateKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_bupdateKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_bupdateKeyTyped
 
     /**
      * @param args the command line arguments
@@ -348,10 +607,13 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
     private javax.swing.JButton baccept;
     private javax.swing.JButton bcancel;
     private javax.swing.JButton bconfirm;
+    private javax.swing.JButton bdelete;
+    private javax.swing.JButton bupdate;
     private javax.swing.JComboBox cbmode;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tconfirmvent;
@@ -363,6 +625,8 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
 
     DefaultTableModel dtm;
     private int precio, code, modopago, monto;
+    private final Ventas_C v = new Ventas_C();
+    private final vista_detalle_ventas vdv = new vista_detalle_ventas();
     private final vista_confirmar vc = new vista_confirmar();
     private final ModoPago_C mp = new ModoPago_C();
     private final ConfirmarVentas_C cv = new ConfirmarVentas_C();
@@ -372,7 +636,12 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
 
     private void star () {
 
+        this.bcancel.setEnabled(false);
         this.baccept.setEnabled(false);
+        this.bconfirm.setEnabled(false);
+        this.cbmode.setSelectedItem(null);
+        this.tfmont.setText("");
+        this.tfcodevent.setText(null);
         dtm = (DefaultTableModel)tconfirmvent.getModel();
         ArrayList<vista_confirmar> values = vc.SearchAll();
         
@@ -387,20 +656,19 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
     private void star2 () {
     
         dtm = (DefaultTableModel)tdetalle.getModel();
-        ArrayList<vista_modopago> value = vmp.buscarmodopago();
-        
+        int id = getInt(tfcodevent.getText());
+        ArrayList<vista_modopago> value = vmp.buscarmodopago(id);
+         
         for (view_modepay values : value) {
-            
+
             dtm.addRow(new Object[]{values.getModo(), values.getMonto()});
-            
+
         }
-        
     
     }
     
     private void cb_valid () {
     
-        ModoPago_C mp = new ModoPago_C();
         ArrayList<ModoPago_C> lista = mp.SearchAll();
         
         for (int i = 0; i < lista.size(); i++) {
@@ -425,10 +693,54 @@ public class ConfirmarVentas_V extends javax.swing.JFrame {
         
     }
     
+    private void updatePrice () {
+    
+        int codigo = getInt(tfcodevent.getText());
+        int val1 = getInt(vdv.ConsultMonto(codigo));
+        int val2 = getInt(cv.Rest(codigo));
+
+        if ((val1 - val2) != 0) {
+
+            int restante = val1 - val2;
+            tfmontres.setText(format.format(restante));
+            this.baccept.setEnabled(true);
+
+        } else if (val1 - val2 == 0) {
+
+            tfmontres.setText(format.format(0));
+            this.bconfirm.setEnabled(true);
+            this.baccept.setEnabled(false);
+
+        }
+    
+    }
+    
+    private void update2 () {
+    
+        int tam = tdetalle.getRowCount();
+        
+        for (int i = 0; i < tam; i++) {
+            
+            dtm.removeRow(0);
+            
+        }
+    
+    }
+    
     private void unvalid () {
     
         this.tfcodevent.setEditable(false);
         this.tfmontres.setEditable(false);
+        this.bdelete.setEnabled(false);
+        this.bupdate.setEnabled(false);
+    
+    }
+    
+    private void clean () {
+    
+        tfcodevent.setText(null);
+        tfmont.setText(null);
+        tfmontres.setText(null);
     
     }
     

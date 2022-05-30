@@ -39,7 +39,7 @@ public class ConexionBD {
                     case MYSQL:
                         host = "localhost:3306";
                         url = "jdbc:mysql://"+ host +"/"+ parametros.getBaseDatos();
-                        Class.forName("com.mysql.jdbc.Driver");
+                        Class.forName("com.mysql.cj.jdbc.Driver");
                         break;
                         
                 }
@@ -53,7 +53,7 @@ public class ConexionBD {
                     
                 } else {
                     
-                    msg = "Error al conectar a la base de datos.";
+                    msg = "Error al conectar a la base de datos 1.";
                     return null;
                     
                 }

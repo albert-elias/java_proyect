@@ -12,6 +12,7 @@ import Control.Ciudades_C;
 import Control.Funcionarios_C;
 import Control.Usuarios_C;
 import Modelos.CargosM;
+import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
@@ -54,6 +55,7 @@ public class Funcionarios_V extends javax.swing.JFrame {
         bdelete = new javax.swing.JButton();
         bexit = new javax.swing.JButton();
         bactualizar = new javax.swing.JButton();
+        breport = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Funcionarios");
@@ -70,7 +72,15 @@ public class Funcionarios_V extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Funcionario", "Cedula", "Telefono", "Direccion", "Ciudad", "Cargo", "Usuario"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jtclerk);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)), "Buscar"));
@@ -119,7 +129,7 @@ public class Funcionarios_V extends javax.swing.JFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         java.awt.GridBagLayout jPanel2Layout = new java.awt.GridBagLayout();
-        jPanel2Layout.columnWidths = new int[] {0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0};
+        jPanel2Layout.columnWidths = new int[] {0, 12, 0, 12, 0, 12, 0, 12, 0, 12, 0};
         jPanel2Layout.rowHeights = new int[] {0};
         jPanel2.setLayout(jPanel2Layout);
 
@@ -141,7 +151,7 @@ public class Funcionarios_V extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 0;
         jPanel2.add(bupdate, gridBagConstraints);
 
@@ -152,7 +162,7 @@ public class Funcionarios_V extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridx = 4;
         gridBagConstraints.gridy = 0;
         jPanel2.add(bdelete, gridBagConstraints);
 
@@ -163,7 +173,7 @@ public class Funcionarios_V extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 50;
+        gridBagConstraints.gridx = 10;
         gridBagConstraints.gridy = 0;
         jPanel2.add(bexit, gridBagConstraints);
 
@@ -174,21 +184,33 @@ public class Funcionarios_V extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 12;
+        gridBagConstraints.gridx = 6;
         gridBagConstraints.gridy = 0;
         jPanel2.add(bactualizar, gridBagConstraints);
+
+        breport.setText("Ver Reporte");
+        breport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breportActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 8;
+        gridBagConstraints.gridy = 0;
+        jPanel2.add(breport, gridBagConstraints);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 691, Short.MAX_VALUE)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -210,6 +232,7 @@ public class Funcionarios_V extends javax.swing.JFrame {
         try {
             
             car.setVisible(true);
+            Cargar_Funcionarios.bupdate.setEnabled(false);
             this.Count();
             
         } catch (Exception e) {
@@ -234,20 +257,33 @@ public class Funcionarios_V extends javax.swing.JFrame {
                 
                 car.setVisible(true);
                 
+                Cargar_Funcionarios.bsave.setEnabled(false);
+                Cargar_Funcionarios.bnew.setEnabled(false);
                 Cargar_Funcionarios.tfcode.setText(String.valueOf(finded.getCode()));
                 Cargar_Funcionarios.tfname.setText(finded.getName());
                 Cargar_Funcionarios.tfidentification.setText(finded.getCi());
+
+//                int job = finded.getJob();
+//                CargosC nom = new CargosC();
+//                CargosC res = nom.Search(String.valueOf(job));
+//                String cargo = res.getName();
+//                Cargar_Funcionarios.cboffice.setSelectedItem(cargo);
+
                 Cargar_Funcionarios.tftelephone.setText(finded.getTelephone());
                 Cargar_Funcionarios.tfdirection.setText(finded.getDirection());
                 Cargar_Funcionarios.tfcity.setText(String.valueOf(finded.getCity()));
-                Cargar_Funcionarios.cboffice.addItem(finded.getJob());
                 Cargar_Funcionarios.tfuser.setText(String.valueOf(finded.getUser()));
+                Cargar_Funcionarios.jTextField1.setText("1");
                 
             }
             
             this.update();
             this.star();
             
+        } else {
+
+            JOptionPane.showMessageDialog(rootPane, "Seleccione un registro para modificar");
+
         }
         
     }//GEN-LAST:event_bupdateActionPerformed
@@ -275,7 +311,7 @@ public class Funcionarios_V extends javax.swing.JFrame {
             this.star();
             
             
-        } catch (Exception e) {
+        } catch (HeadlessException e) {
             
             System.err.println(e);
             
@@ -326,6 +362,12 @@ public class Funcionarios_V extends javax.swing.JFrame {
         
     }//GEN-LAST:event_bsearchActionPerformed
 
+    private void breportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breportActionPerformed
+        
+        vf.showFuncionarios();
+
+    }//GEN-LAST:event_breportActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -373,6 +415,7 @@ public class Funcionarios_V extends javax.swing.JFrame {
     private javax.swing.JButton bdelete;
     private javax.swing.JButton bexit;
     private javax.swing.JButton bnew;
+    private javax.swing.JButton breport;
     private javax.swing.JButton bsearch;
     private javax.swing.JButton bupdate;
     private javax.swing.JComboBox cbsearch;
@@ -419,28 +462,40 @@ public class Funcionarios_V extends javax.swing.JFrame {
     public void search (String search) {
         
         String options = (String)cbsearch.getSelectedItem();
+        dtm = (DefaultTableModel) jtclerk.getModel();
+        ArrayList<vista_funcionarios> list = null;
         
         switch (options) {
-            
-            case "Codigo" : 
-                DefaultTableModel model4id = f.Search4ID(search);
-                jtclerk.setModel(model4id);
+            case "ID":
+                list = vf.SearchID(search);                
                 break;
-                
-            case "Funcionario" : 
-                DefaultTableModel model4name = f.Search4Name(search);
-                jtclerk.setModel(model4name);
+
+            case "Funcionario":
+                list = vf.SearchName(search);
                 break;
-                
+
             case "CI":
-                DefaultTableModel model4ci = f.Search4Ci(search);
-                jtclerk.setModel(model4ci);
+                list = vf.SearchCI(search);
                 break;
-                
-            case "Telefono" :
-                DefaultTableModel model4tel = f.Search4Teleph(search);
-                jtclerk.setModel(model4tel);
+
+            case "Telefono":
+                list = vf.SearchTelephone(search);
+                break;
+
+        }
         
+        if (list != null) {
+
+            update();
+
+            for(int i=0; i < list.size(); i++ ){
+            
+                dtm.addRow(new Object[]{list.get(i).getCode(), list.get(i).getName(),
+                list.get(i).getCi(), list.get(i).getTelephone(), list.get(i).getDirection(),
+                list.get(i).getCity(), list.get(i).getOffice(), list.get(i).getUser()});
+
+            }
+
         }
     
     }

@@ -64,7 +64,7 @@ public class vista_confirmar extends view_confirm {
         
         try {
             
-            querySQL = "select * from vista_confirmar_venta";
+            querySQL = "select * from vista_confirmar_venta where estado = 0";
             state = rutaConec.createStatement();
             rs = state.executeQuery(querySQL);
             

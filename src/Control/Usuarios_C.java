@@ -7,11 +7,19 @@ import Modelos.Usuarios_M;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -259,7 +267,7 @@ public class Usuarios_C extends Usuarios_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             
@@ -267,6 +275,25 @@ public class Usuarios_C extends Usuarios_M {
         
         return model;
         
+    }
+
+    public void showUsers(){
+  
+        try {
+
+            String ubicacion = "C:\\Users\\User\\JaspersoftWorkspace\\estoy\\usuarios.jasper";
+            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(ubicacion);
+            JasperPrint jp = JasperFillManager.fillReport(report, null, rutaConec); 
+            JasperViewer view = new JasperViewer(jp, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+            view.setVisible(true);
+
+        } catch (JRException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
     }
     
 }

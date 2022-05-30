@@ -11,10 +11,18 @@ import ModelosVista.view_sale;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -44,9 +52,9 @@ public class vista_ventas extends view_sale {
         
     }
 
-    public vista_ventas(int codigo, String factura, String cliente, int monto, int valor, String vendedor, String fecha) {
+    public vista_ventas(int codigo, String factura, String cliente, int monto, String vendedor, String fecha, int estado) {
         
-        super(codigo, factura, cliente, monto, valor, vendedor, fecha);
+        super(codigo, factura, cliente, monto, vendedor, fecha, estado);
         p = new ParametrosConexionBD();
         p.setTipoMotor(ParametrosConexionBD.MOTOR_BD.MYSQL);
         p.setBaseDatos("estoy");
@@ -64,14 +72,14 @@ public class vista_ventas extends view_sale {
         
         try {
             
-            querySQL = "SELECT * FROM vista_ventas WHERE pago = 0";
+            querySQL = "SELECT * FROM vista_ventas WHERE estado = 1";
             state = rutaConec.createStatement();
             rs = state.executeQuery(querySQL);
             
             while (rs.next()) {
                 
-                all.add(new vista_ventas(rs.getInt("codigo"), rs.getString("factura"), rs.getString("cliente"),
-                rs.getInt("monto"), rs.getInt("valor"), rs.getString("vendedor"), rs.getString("fecha")));
+                all.add(new vista_ventas(rs.getInt("codigo"), rs.getString("fecha"), rs.getString("factura"),
+                rs.getInt("monto"), rs.getString("clientes"), rs.getString("vendedor"), rs.getInt("estado")));
                 
             }
             
@@ -124,12 +132,12 @@ public class vista_ventas extends view_sale {
             
             while (rs.next()) {
                 
-                val = new vista_ventas(rs.getInt("codigo"), rs.getString("factura"), rs.getString("cliente"),
-                rs.getInt("monto"), rs.getInt("valor"), rs.getString("vendedor"), rs.getString("fecha"));
+                val = new vista_ventas(rs.getInt("codigo"), rs.getString("fecha"), rs.getString("factura"),
+                rs.getInt("monto"), rs.getString("clientes"), rs.getString("vendedor"), rs.getInt("estado"));
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             
@@ -137,6 +145,106 @@ public class vista_ventas extends view_sale {
         
         return val;
         
+    }
+
+    public ArrayList <vista_ventas> SearchCodigo (String search){
+        
+        ArrayList<vista_ventas> all = new ArrayList<>();
+        
+        try {
+            
+            querySQL = "select * from vista_ventas where codigo like '%"+search+"%' AND estado = 1";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {
+                
+                all.add(new vista_ventas(rs.getInt("codigo"), rs.getString("fecha"), rs.getString("factura"),
+                rs.getInt("monto"), rs.getString("clientes"), rs.getString("vendedor"), rs.getInt("estado")));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            Logger.getLogger(vista_ventas.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+
+        return all;
+
+    }
+
+    public ArrayList <vista_ventas> SearchCliente (String search){
+        
+        ArrayList<vista_ventas> all = new ArrayList<>();
+        
+        try {
+            
+            querySQL = "select * from vista_ventas where clientes like '%"+search+"%' AND estado = 1";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {
+                
+                all.add(new vista_ventas(rs.getInt("codigo"), rs.getString("fecha"), rs.getString("factura"),
+                rs.getInt("monto"), rs.getString("clientes"), rs.getString("vendedor"), rs.getInt("estado")));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            Logger.getLogger(vista_ventas.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+
+        return all;
+
+    }
+
+    public ArrayList <vista_ventas> SearchVendedor (String search){
+        
+        ArrayList<vista_ventas> all = new ArrayList<>();
+        
+        try {
+            
+            querySQL = "select * from vista_ventas where vendedor like '%"+search+"%' AND estado = 1";
+            state = rutaConec.createStatement();
+            rs = state.executeQuery(querySQL);
+            
+            while (rs.next()) {
+                
+                all.add(new vista_ventas(rs.getInt("codigo"), rs.getString("fecha"), rs.getString("factura"),
+                rs.getInt("monto"), rs.getString("clientes"), rs.getString("vendedor"), rs.getInt("estado")));
+                
+            }
+            
+        } catch (SQLException ex) {
+            
+            Logger.getLogger(vista_ventas.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
+
+        return all;
+
+    }
+
+    public void showVentas(){
+  
+        try {
+
+            String ubicacion = "C:\\Users\\User\\JaspersoftWorkspace\\estoy\\ventas.jasper";
+            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(ubicacion);
+            JasperPrint jp = JasperFillManager.fillReport(report, null, rutaConec); 
+            JasperViewer view = new JasperViewer(jp, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+            view.setVisible(true);
+
+        } catch (JRException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
     }
     
 }

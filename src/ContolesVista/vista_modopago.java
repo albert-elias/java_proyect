@@ -56,13 +56,13 @@ public class vista_modopago extends view_modepay {
         
     }
     
-    public ArrayList <vista_modopago> buscarmodopago() {
+    public ArrayList <vista_modopago> buscarmodopago(int id) {
         
         ArrayList <vista_modopago> all = new ArrayList<>();
         
         try {
             
-            querySQL = "SELECT * FROM vista_modp_pago";
+            querySQL = "SELECT * FROM vista_modp_pago where venta = 0" + id;
             state = rutaConec.createStatement();
             rs = state.executeQuery(querySQL);
             

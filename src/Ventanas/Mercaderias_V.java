@@ -59,6 +59,7 @@ public class Mercaderias_V extends javax.swing.JFrame {
         jbdelete = new javax.swing.JButton();
         jbexit = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        breport = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -77,7 +78,15 @@ public class Mercaderias_V extends javax.swing.JFrame {
             new String [] {
                 "ID", "Codigo de Fabrica", "Producto", "Stock", "Precio", "Descripcion"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtmercaderias.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtmercaderiasMouseClicked(evt);
@@ -160,6 +169,9 @@ public class Mercaderias_V extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtfstockKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfstockKeyTyped(evt);
+            }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 6;
@@ -170,6 +182,9 @@ public class Mercaderias_V extends javax.swing.JFrame {
         jtfprice.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jtfpriceKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jtfpriceKeyTyped(evt);
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
@@ -235,10 +250,10 @@ public class Mercaderias_V extends javax.swing.JFrame {
         jPanel2.add(jbsearch, gridBagConstraints);
 
         jPanel3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        java.awt.GridBagLayout jPanel3Layout = new java.awt.GridBagLayout();
-        jPanel3Layout.columnWidths = new int[] {0, 7, 0};
-        jPanel3Layout.rowHeights = new int[] {0, 10, 0, 10, 0};
-        jPanel3.setLayout(jPanel3Layout);
+        java.awt.GridBagLayout jPanel3Layout1 = new java.awt.GridBagLayout();
+        jPanel3Layout1.columnWidths = new int[] {0, 7, 0};
+        jPanel3Layout1.rowHeights = new int[] {0, 10, 0, 10, 0};
+        jPanel3.setLayout(jPanel3Layout1);
 
         jbsave.setText("Guardar");
         jbsave.addActionListener(new java.awt.event.ActionListener() {
@@ -254,7 +269,6 @@ public class Mercaderias_V extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel3.add(jbsave, gridBagConstraints);
 
         jbupdate.setText("Modificar");
@@ -278,7 +292,6 @@ public class Mercaderias_V extends javax.swing.JFrame {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 2;
         gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel3.add(jbdelete, gridBagConstraints);
 
         jbexit.setText("Salir");
@@ -305,6 +318,17 @@ public class Mercaderias_V extends javax.swing.JFrame {
         gridBagConstraints.ipadx = 12;
         jPanel3.add(jButton1, gridBagConstraints);
 
+        breport.setText("Reporte");
+        breport.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                breportActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 4;
+        jPanel3.add(breport, gridBagConstraints);
+
         jTextField1.setText("jTextField1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -317,33 +341,33 @@ public class Mercaderias_V extends javax.swing.JFrame {
                     .addComponent(jScrollPane1)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 508, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel1)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)))
+                        .addGap(9, 9, 9))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 273, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -356,15 +380,16 @@ public class Mercaderias_V extends javax.swing.JFrame {
         this.jbupdate.setEnabled(true);
         dtm = (DefaultTableModel) this.jtmercaderias.getModel();
         int selRow = this.jtmercaderias.getSelectedRow();
-        Mercaderias_C car = new Mercaderias_C();
+        
         
         if(selRow != -1){
             
-            String id = dtm.getValueAt(selRow, 0).toString();
-            Mercaderias_C finded = car.Search(id);
+            Object value = jtmercaderias.getValueAt(selRow, 0);
+            Mercaderias_C finded = m.Search((String.valueOf(value)));
             
             if(!(finded == null)){
                 
+                this.jbsave.setEnabled(false);
                 this.jTextField1.setText(String.valueOf(finded.getId()));
                 this.jtfcodfab.setText(finded.getCodigo());
                 this.jtfname.setText(finded.getNombre());
@@ -491,14 +516,16 @@ public class Mercaderias_V extends javax.swing.JFrame {
             
         } else {
         
-            Mercaderias_C m = new Mercaderias_C(id, codigo, nombre, stock, precio, obs);
-            Mercaderias_C existe = m.Search(String.valueOf(id));
+            Mercaderias_C mer = new Mercaderias_C(id, codigo, nombre, stock, precio, obs);
+            Mercaderias_C existe = mer.Search(String.valueOf(id));
+            Mercaderias_C consult = mer.Consult(codigo);
         
-            if (existe == null) {
+            if ((existe == null) && (consult == null)) {
             
-                if (m.Insert()) {
+                if (mer.Insert()) {
                     
                     JOptionPane.showMessageDialog(rootPane, "Registrado con exito");
+                    clean();
                     
                 } else {
                     
@@ -509,11 +536,9 @@ public class Mercaderias_V extends javax.swing.JFrame {
             } else {
                 
                 JOptionPane.showMessageDialog(rootPane, "Ya existe");
-                jtfcodfab.setText(existe.getCodigo());
-                jtfname.setText(existe.getNombre());
-                jtfstock.setText(String.valueOf(existe.getStock()));
-                jtfprice.setText(String.valueOf(existe.getPrecio()));
-                jtfdesc.setText(existe.getDescripcion());
+                
+                
+                return;
                 
             }
             
@@ -546,6 +571,7 @@ public class Mercaderias_V extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(rootPane, "Registro modficado");
             this.update();
             this.star();
+            this.clean();
             
         }else{
             
@@ -558,9 +584,8 @@ public class Mercaderias_V extends javax.swing.JFrame {
     private void jbdeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbdeleteActionPerformed
         
         String code = jTextField1.getText();
-        Mercaderias_C mp = new Mercaderias_C();
         
-        if(mp.Delete(code)){
+        if(m.Delete(code)){
             
             JOptionPane.showMessageDialog(this, "Eliminando satisfactoriamente");
             
@@ -602,6 +627,7 @@ public class Mercaderias_V extends javax.swing.JFrame {
         
         this.Count();
         this.clean();
+        this.jbsave.setEnabled(true);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -622,6 +648,38 @@ public class Mercaderias_V extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jtfsearchKeyPressed
+
+    private void breportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_breportActionPerformed
+
+        m.showMercaderias();
+
+    }//GEN-LAST:event_breportActionPerformed
+
+    private void jtfstockKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfstockKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_jtfstockKeyTyped
+
+    private void jtfpriceKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jtfpriceKeyTyped
+        
+        char numero = evt.getKeyChar();
+
+        if (Character.isLetter(numero)) {
+
+            getToolkit().beep();
+            evt.consume();
+
+        }
+
+    }//GEN-LAST:event_jtfpriceKeyTyped
 
     /**
      * @param args the command line arguments
@@ -659,6 +717,7 @@ public class Mercaderias_V extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton breport;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
@@ -688,6 +747,7 @@ public class Mercaderias_V extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     DefaultTableModel dtm;
+    Mercaderias_C m = new Mercaderias_C();
     public int id, stock, precio;
     public String codigo, nombre, obs;
     
@@ -695,8 +755,8 @@ public class Mercaderias_V extends javax.swing.JFrame {
     
         try {
             
-            Mercaderias_C a = new Mercaderias_C();
-            jTextField1.setText(a.New());
+            jTextField1.setText(m.New());
+            jtfcodfab.requestFocus();
             
         } catch (Exception e) {
             
@@ -731,8 +791,7 @@ public class Mercaderias_V extends javax.swing.JFrame {
     private void star () {
         
         dtm = (DefaultTableModel) jtmercaderias.getModel();
-        Mercaderias_C c = new Mercaderias_C();
-        ArrayList<Mercaderias_C> all = c.SearchAll();
+        ArrayList<Mercaderias_C> all = m.SearchAll();
         
         for(int i=0; i < all.size(); i++ ){
             
@@ -743,35 +802,46 @@ public class Mercaderias_V extends javax.swing.JFrame {
         }
         
     }
-    
+
     public void search (String search) {
-        
+
         String options = (String)jcbopciones.getSelectedItem();
-        Mercaderias_C m = new Mercaderias_C();
+        dtm = (DefaultTableModel) jtmercaderias.getModel();
+        ArrayList<Mercaderias_C> list = null;
         
         switch (options) {
-            
-            case "ID" : 
-                DefaultTableModel model4id = m.Search4ID(search);
-                jtmercaderias.setModel(model4id);
+            case "ID":
+                list = m.SearchID(search);                
                 break;
-                
-            case "Codigo de Fabrica" : 
-                DefaultTableModel model4code = m.Search4Code(search);
-                jtmercaderias.setModel(model4code);
+
+            case "Codigo de Fabrica":
+                list = m.SearchCodigo(search);
                 break;
-                
+
             case "Producto":
-                DefaultTableModel model4name = m.Search4Name(search);
-                jtmercaderias.setModel(model4name);
+                list = m.SearchName(search);
                 break;
-                
-            case "Descripcion" :
-                DefaultTableModel model4desc = m.Search4Desc(search);
-                jtmercaderias.setModel(model4desc);
-        
+
+            case "Descripcion":
+                list = m.SearchDescription(search);
+                break;
+
         }
-    
+        
+        if (list != null) {
+
+            update();
+
+            for(int i=0; i < list.size(); i++ ){
+            
+                dtm.addRow(new Object[]{list.get(i).getId(), list.get(i).getCodigo(),
+                list.get(i).getNombre(), list.get(i).getStock(), list.get(i).getPrecio(),
+                list.get(i).getDescripcion()});
+
+            }
+
+        }
+
     }
     
     public static Integer getInt(String cadena){

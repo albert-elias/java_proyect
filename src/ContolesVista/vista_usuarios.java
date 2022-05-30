@@ -15,6 +15,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -82,6 +89,25 @@ public class vista_usuarios extends view_users {
         
         return all;
         
+    }
+
+    public void showUsuarios(){
+  
+        try {
+
+            String ubicacion = "C:\\Users\\User\\JaspersoftWorkspace\\estoy\\usuarios.jasper";
+            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(ubicacion);
+            JasperPrint jp = JasperFillManager.fillReport(report, null, rutaConec); 
+            JasperViewer view = new JasperViewer(jp, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+            view.setVisible(true);
+
+        } catch (JRException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
     }
     
 }

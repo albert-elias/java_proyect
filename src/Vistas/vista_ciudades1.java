@@ -81,7 +81,15 @@ public class vista_ciudades1 extends javax.swing.JFrame {
             new String [] {
                 "Codigo", "Ciudad"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jtcity.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jtcityMouseClicked(evt);
@@ -259,9 +267,14 @@ public class vista_ciudades1 extends javax.swing.JFrame {
     
     public void consult (String search) {
     
+        update();
         Ciudades_C c = new Ciudades_C();
-        DefaultTableModel model = c.Consult(search);
-        jtcity.setModel(model);
+        ArrayList<Ciudades_C> all = c.Consult(search);
+        for(int i = 0; i < all.size(); i++ ){
+            
+            dtmciudad.addRow(new Object[]{all.get(i).getId(), all.get(i).getName()});
+            
+        }
     
     }
     
@@ -277,6 +290,18 @@ public class vista_ciudades1 extends javax.swing.JFrame {
             
         }
     
+    }
+
+    private void update () {
+        
+        int tam = jtcity.getRowCount();
+        
+        for (int i = 0; i < tam; i++) {
+            
+            dtmciudad.removeRow(0);
+            
+        }
+        
     }
     
 }

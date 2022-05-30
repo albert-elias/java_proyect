@@ -11,6 +11,7 @@ import Modelos.Ventas_M;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,7 +19,6 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -48,9 +48,9 @@ public class Ventas_C extends Ventas_M {
         
     }
 
-    public Ventas_C(int id, String fecha, String factura, int id_cliente, int id_vendedor) {
+    public Ventas_C(int id, String fecha, String factura, int monto, int id_cliente, int id_vendedor, int estado) {
         
-        super(id, fecha, factura, id_cliente, id_vendedor);
+        super(id, fecha, factura, monto, id_cliente, id_vendedor, estado);
         p = new ParametrosConexionBD();
         p.setTipoMotor(ParametrosConexionBD.MOTOR_BD.MYSQL);
         p.setBaseDatos("estoy");
@@ -67,7 +67,7 @@ public class Ventas_C extends Ventas_M {
         try {
             
             querySQL = "insert into ventas values ("+id+", '"+fecha+"', '"+factura+"',"
-            + " "+id_cliente+", "+id_vendedor+")";
+            + " "+monto+", "+id_cliente+", "+id_vendedor+", "+estado+")";
             
             state = rutaConec.createStatement();
             answer = state.executeUpdate(querySQL);
@@ -78,7 +78,7 @@ public class Ventas_C extends Ventas_M {
                 
             } 
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ventas_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -106,7 +106,7 @@ public class Ventas_C extends Ventas_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ventas_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -121,7 +121,8 @@ public class Ventas_C extends Ventas_M {
         try {
             
             querySQL = "update ventas set fecha = '"+fecha+"', factura = '"+factura+"',"
-            + " clientes_id = "+id_cliente+", funcionarios_id = "+id_vendedor+" where id = "+id+"";
+            + " monto = "+monto+", clientes_id = "+id_cliente+", funcionarios_id = "+id_vendedor+","
+            + " estado = "+estado+" where id = "+id+"";
             
             state = rutaConec.createStatement();
             answer = state.executeUpdate(querySQL);
@@ -136,7 +137,7 @@ public class Ventas_C extends Ventas_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ventas_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -159,12 +160,12 @@ public class Ventas_C extends Ventas_M {
             while (rs.next()) {
                 
                 val = new Ventas_C(rs.getInt("id"), rs.getString("fecha"),
-                rs.getString("factura"), rs.getInt("clientes_id"),
-                rs.getInt("funcionarios_id"));
+                rs.getString("factura"), rs.getInt("monto"), rs.getInt("clientes_id"),
+                rs.getInt("funcionarios_id"), rs.getInt("estado"));
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             System.err.println(ex);
             
@@ -187,12 +188,12 @@ public class Ventas_C extends Ventas_M {
             while (rs.next()) {
                 
                 all.add(new Ventas_C(rs.getInt("id"), rs.getString("fecha"),
-                rs.getString("factura"), rs.getInt("clientes_id"),
-                rs.getInt("funcionarios_id")));
+                rs.getString("factura"), rs.getInt("monto"), rs.getInt("clientes_id"),
+                rs.getInt("funcionarios_id"), rs.getInt("estado")));
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ventas_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -218,7 +219,7 @@ public class Ventas_C extends Ventas_M {
             }
             
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(Ventas_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -253,7 +254,7 @@ public class Ventas_C extends Ventas_M {
                 
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
             System.err.println("Error al consultar id de venta"+e.getMessage());
             
@@ -263,37 +264,29 @@ public class Ventas_C extends Ventas_M {
     
     }
     
-    public DefaultTableModel Search4ID (String search) {
-        
-        String [] items = {"codigo", "factura", "cliente", "monto", "vendedor", "fecha"};
-        String [] files = new String [6];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from vista_ventas where codigo like '%"+search+"%'";
+    public String buscaVend (int venta) {
+    
+        int id = 0;
         
         try {
             
+            querySQL = "select clientes_id from ventas where id = " + venta;
+            
             ps = rutaConec.prepareStatement(querySQL);
             rs = ps.executeQuery();
-            while (rs.next()) {
+            
+            while (rs.next()) {    
                 
-                files [0] = rs.getString("codigo");
-                files [1] = rs.getString("factura");
-                files [2] = rs.getString("cliente");
-                files [3] = rs.getString("monto");
-                files [4] = rs.getString("vendedor");
-                files [5] = rs.getString("fecha");
-                
-                model.addRow(files);
+                id = rs.getInt("clientes_id");
                 
             }
             
         } catch (Exception e) {
             
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
+            System.err.println("Error al consultar id de venta"+e.getMessage());
             
         }
-        
+
         finally {
         
             try {
@@ -302,7 +295,7 @@ public class Ventas_C extends Ventas_M {
                 if (ps != null) ps.close();
                 if (rutaConec != null) rutaConec.close();
                 
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 
                 JOptionPane.showMessageDialog(null, e);
                 
@@ -310,109 +303,60 @@ public class Ventas_C extends Ventas_M {
             
         }
         
-        return model;
+        return String.valueOf(id);
     
     }
     
-    public DefaultTableModel Search4Client (String search) {
-        
-        String [] items = {"codigo", "factura", "cliente", "monto", "vendedor", "fecha"};
-        String [] files = new String [6];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from vista_ventas where cliente like '%"+search+"%'";
+    public String buscaFun (int venta) {
+    
+        int id = 0;
         
         try {
             
+            querySQL = "select funcionarios_id from ventas where id = " + venta;
+            
             ps = rutaConec.prepareStatement(querySQL);
             rs = ps.executeQuery();
-            while (rs.next()) {
+            
+            while (rs.next()) {    
                 
-                files [0] = rs.getString("codigo");
-                files [1] = rs.getString("factura");
-                files [2] = rs.getString("cliente");
-                files [3] = rs.getString("monto");
-                files [4] = rs.getString("vendedor");
-                files [5] = rs.getString("fecha");
-                
-                model.addRow(files);
+                id = rs.getInt("funcionarios_id");
                 
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
+            System.err.println("Error al consultar id de venta"+e.getMessage());
             
         }
         
-        return model;
+        return String.valueOf(id);
     
     }
     
-    public DefaultTableModel Search4Seller (String search) {
-        
-        String [] items = {"codigo", "factura", "cliente", "monto", "vendedor", "fecha"};
-        String [] files = new String [6];
-        
-        DefaultTableModel model = new DefaultTableModel(null, items);
-        querySQL = "select * from vista_ventas where vendedor like '%"+search+"%'";
+    public Integer consultAmount (int venta) {
+    
+        int id = 0;
         
         try {
             
+            querySQL = "SELECT monto FROM ventas WHERE id = " + venta;
             ps = rutaConec.prepareStatement(querySQL);
             rs = ps.executeQuery();
+            
             while (rs.next()) {
                 
-                files [0] = rs.getString("codigo");
-                files [1] = rs.getString("factura");
-                files [2] = rs.getString("cliente");
-                files [3] = rs.getString("monto");
-                files [4] = rs.getString("vendedor");
-                files [5] = rs.getString("fecha");
-                
-                model.addRow(files);
+                id = rs.getInt("monto");
                 
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
-            JOptionPane.showMessageDialog(null, "Error al conectar. "+e.getMessage());
-            
-        }
-        
-        finally {
-        
-            try {
-                
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (rutaConec != null) rutaConec.close();
-                
-            } catch (Exception e) {
-                
-                JOptionPane.showMessageDialog(null, e);
-                
-            }
+            System.err.println(e.getMessage());
             
         }
         
-        return model;
+        return id;
     
     }
     

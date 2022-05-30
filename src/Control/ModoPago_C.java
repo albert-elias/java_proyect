@@ -11,10 +11,18 @@ import Modelos.ModoPago_M;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -180,7 +188,7 @@ public class ModoPago_C extends ModoPago_M {
                 
             }
             
-        } catch (Exception ex) {
+        } catch (SQLException ex) {
             
             Logger.getLogger(ModoPago_C.class.getName()).log(Level.SEVERE, null, ex);
             
@@ -260,7 +268,7 @@ public class ModoPago_C extends ModoPago_M {
                 
             }
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             
             System.err.println("Error al consultar modo de pago" + e.getMessage());
             
@@ -268,6 +276,25 @@ public class ModoPago_C extends ModoPago_M {
     
         return name;
         
+    }
+
+    public void showModoPago(){
+  
+        try {
+
+            String ubicacion = "Reportes\\\\estoy\\modo_pago.jasper";
+            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile(ubicacion);
+            JasperPrint jp = JasperFillManager.fillReport(report, null, rutaConec); 
+            JasperViewer view = new JasperViewer(jp, false);
+            view.setDefaultCloseOperation(DISPOSE_ON_CLOSE); 
+            view.setVisible(true);
+
+        } catch (JRException e) {
+
+            System.out.println(e.getMessage());
+
+        }
+
     }
     
 }
